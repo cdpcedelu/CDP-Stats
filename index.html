@@ -281,12 +281,12 @@
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
+    text-align: center;
   }
   .nav::-webkit-scrollbar { display: none; }
 
   .nav-inner {
     max-width: 900px;
-    margin: 0 auto;
     display: inline-flex;
     min-width: max-content;
     position: relative;
@@ -441,6 +441,13 @@
     gap: 10px;
     box-shadow: var(--shadow-sm);
     transition: all 0.2s;
+  }
+  
+  @media (max-width: 480px) {
+    .partido-row {
+      padding: 12px 10px;
+      gap: 6px;
+    }
   }
 
   .partido-row:hover {
@@ -1005,13 +1012,19 @@
 
   /* MOBILE */
   @media (max-width: 480px) {
+    html { font-size: 110%; }
     .main { padding: 12px; }
     .standings-table th,
-    .standings-table td { padding: 8px 6px; font-size: 12px; }
-    .score { font-size: 20px; }
-    .equipo-name { font-size: 14px; }
-    .section-title { font-size: 26px; }
-    .team-name-cell { font-size: 13px; }
+    .standings-table td { padding: 8px 6px; }
+    .equipo-name { 
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .equipo-fixture {
+      flex: 1;
+      min-width: 0;
+    }
   }
 
   /* ZONE DIVIDER */
