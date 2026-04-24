@@ -2510,7 +2510,7 @@ function filterByEquipo(equipo) {
       return !vis.includes('libre');
     });
     if (!sinLibre.length) return true; // todos son libre
-    return sinLibre.every(p => p.jugado === 'Jugado');
+    return sinLibre.every(p => p.jugado === true || p.jugado === 'Jugado');
   }
 
   // Primera fecha incompleta (o la última si todas completas)
@@ -2578,7 +2578,7 @@ function filterByEquipo(equipo) {
         lastFecha = fNum;
       }
     }
-    const jugado = p.jugado === 'Jugado';
+    const jugado = p.jugado === true || p.jugado === 'Jugado';
     const nrCase = p.jugado === 'NR';
     const rowClass = p.isSenior ? 'senior' : (jugado || nrCase ? 'jugado' : 'pendiente');
     let local = '', visitante = '', result = '';
