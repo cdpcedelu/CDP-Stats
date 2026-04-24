@@ -2529,7 +2529,7 @@ function filterByEquipo(equipo) {
   const completa  = fechaCompleta(selItems);
   // No contar LIBRE para el badge de estado
   const sinLibre  = selItems.filter(p => !String(p.partido || '').toLowerCase().includes('libre'));
-  const jugados   = sinLibre.filter(p => p.jugado === 'Jugado').length;
+  const jugados   = sinLibre.filter(p => p.jugado === true || p.jugado === 'Jugado').length;
   const pendientes = sinLibre.length - jugados;
   const statusCls = completa ? 'completa' : '';
   const statusTxt = completa ? '✓ Completa' : `${pendientes} pendiente${pendientes !== 1 ? 's' : ''}`;
@@ -2540,7 +2540,7 @@ function filterByEquipo(equipo) {
   let html = '';
   if (state.currentEquipo) {
     const totalEquipo = items.length;
-    const jugadosEquipo = items.filter(p => p.jugado === 'Jugado').length;
+    const jugadosEquipo = items.filter(p => p.jugado === true || p.jugado === 'Jugado').length;
     html = `
   <div class="fecha-selector-wrap">
     <span class="fecha-selector-label">🛡️ ${state.currentEquipo}</span>
@@ -2551,7 +2551,7 @@ function filterByEquipo(equipo) {
     const opts = fechaKeys.map(k => {
       const todos    = groups[k];
       const sinLib   = todos.filter(p => !String(p.partido || '').toLowerCase().includes('libre'));
-      const jug      = sinLib.filter(p => p.jugado === 'Jugado').length;
+      const jug      = sinLib.filter(p => p.jugado === true || p.jugado === 'Jugado').length;
       const tot      = sinLib.length;
       const lbl      = `Fecha ${k}  (${jug}/${tot} jugados)`;
       return `<option value="${k}" ${k === selKey ? 'selected' : ''}>${lbl}</option>`;
@@ -3001,7 +3001,7 @@ function renderDisc(view) {
       const fechaNums = Object.keys(groups).map(Number).sort((a,b) => a-b);
       for (const fn of fechaNums) {
         const sinLibre = groups[fn].filter(p => !String(p.partido||'').toLowerCase().includes('libre'));
-        const completa = sinLibre.length > 0 && sinLibre.every(p => p.jugado === 'Jugado');
+        const completa = sinLibre.length > 0 && sinLibre.every(p => p.jugado === true || p.jugado === 'Jugado');
         if (!completa) { proximaFecha = fn; break; }
       }
     }
