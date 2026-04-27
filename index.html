@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- CDP Fixture — index.html — 2026-04-27 20:35 ARG — SUPABASE -->
+<!-- CDP Fixture — index.html — 2026-04-27 20:55 ARG — SUPABASE -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -823,6 +823,14 @@
   }
   .ver-mas-btn:hover {
     background: var(--bg4);
+  }
+
+  /* Section subtitle */
+  .section-subtitle {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 1px;
+    color: var(--text);
   }
 
   /* GOLEADORES */
@@ -2170,21 +2178,50 @@
     <div id="adminDashboard" style="display:none">
       <div class="section-header">
         <div>
-          <div class="section-title">Gestión de Partidos</div>
+          <div class="section-title">Panel de Administración</div>
           <div style="color:var(--text-dimmer);font-size:13px;margin-top:2px">
             Bienvenido, <span id="adminUserName">Admin</span>
             · <a href="javascript:void(0)" onclick="adminLogout()" style="color:var(--red);text-decoration:none;font-weight:600">Cerrar sesión</a>
           </div>
         </div>
-        <button class="btn-primary" onclick="openNuevoPartidoModal()" style="font-size:13px;padding:8px 16px">+ Nuevo Partido</button>
       </div>
 
-      <!-- Fecha tabs -->
-      <div class="tab-row" id="adminFechaTabs" style="margin-bottom:12px"></div>
+      <!-- Admin Section Tabs -->
+      <div class="tab-row" style="margin-bottom:16px">
+        <button class="tab-pill active" onclick="showAdminSection('partidos', this)">⚽ Partidos</button>
+        <button class="tab-pill" onclick="showAdminSection('sponsors', this)">⭐ Sponsors</button>
+        <button class="tab-pill" onclick="showAdminSection('reglamentos', this)">📋 Reglamentos</button>
+      </div>
 
-      <!-- Match list -->
-      <div id="adminMatchList">
-        <div class="loading"><div class="loading-spinner"></div><div class="loading-text">Cargando partidos...</div></div>
+      <!-- SECCIÓN PARTIDOS -->
+      <div id="adminSeccionPartidos">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <div class="tab-row" id="adminFechaTabs"></div>
+          <button class="btn-primary" onclick="openNuevoPartidoModal()" style="font-size:13px;padding:8px 16px">+ Nuevo Partido</button>
+        </div>
+
+        <!-- Match list -->
+        <div id="adminMatchList">
+          <div class="loading"><div class="loading-spinner"></div><div class="loading-text">Cargando partidos...</div></div>
+        </div>
+      </div>
+
+      <!-- SECCIÓN SPONSORS -->
+      <div id="adminSeccionSponsors" style="display:none">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <div class="section-subtitle">Gestión de Sponsors</div>
+          <button class="btn-primary" onclick="openSponsorModal()" style="font-size:13px;padding:8px 16px">+ Nuevo Sponsor</button>
+        </div>
+        <div id="adminSponsorsList"></div>
+      </div>
+
+      <!-- SECCIÓN REGLAMENTOS -->
+      <div id="adminSeccionReglamentos" style="display:none">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <div class="section-subtitle">Gestión de Reglamentos</div>
+          <button class="btn-primary" onclick="openReglamentoModal()" style="font-size:13px;padding:8px 16px">+ Nuevo Reglamento</button>
+        </div>
+        <div id="adminReglamentosList"></div>
       </div>
 
       <!-- Modal Nuevo Partido -->
@@ -2247,6 +2284,86 @@
           <div class="modal-footer">
             <button class="btn-secondary" onclick="closeNuevoPartidoModal()">Cancelar</button>
             <button class="btn-primary" onclick="guardarNuevoPartido()">Guardar Partido</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Sponsor -->
+      <div id="sponsorModal" class="modal-overlay" style="display:none">
+        <div class="modal-content" style="max-width:450px">
+          <div class="modal-header">
+            <span class="modal-title" id="sponsorModalTitle">➕ Nuevo Sponsor</span>
+            <button class="modal-close" onclick="closeSponsorModal()">×</button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" id="spId" value="">
+            <div class="form-group">
+              <label class="form-label">Nombre</label>
+              <input type="text" id="spNombre" class="admin-select" placeholder="Nombre del sponsor">
+            </div>
+            <div class="form-group">
+              <label class="form-label">URL de la imagen (logo)</label>
+              <input type="text" id="spImagen" class="admin-select" placeholder="https://...">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Link (opcional)</label>
+              <input type="text" id="spLink" class="admin-select" placeholder="https://...">
+            </div>
+            <div class="form-row">
+              <div class="form-group" style="flex:1">
+                <label class="form-label">Orden</label>
+                <input type="number" id="spOrden" class="admin-select" value="1" min="1">
+              </div>
+              <div class="form-group" style="flex:1">
+                <label class="form-label">Activo</label>
+                <select id="spActivo" class="admin-select">
+                  <option value="1">Sí</option>
+                  <option value="0">No</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn-secondary" onclick="closeSponsorModal()">Cancelar</button>
+            <button class="btn-primary" onclick="guardarSponsor()">Guardar</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Reglamento -->
+      <div id="reglamentoModal" class="modal-overlay" style="display:none">
+        <div class="modal-content" style="max-width:450px">
+          <div class="modal-header">
+            <span class="modal-title" id="reglamentoModalTitle">➕ Nuevo Reglamento</span>
+            <button class="modal-close" onclick="closeReglamentoModal()">×</button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" id="rgId" value="">
+            <div class="form-group">
+              <label class="form-label">Título</label>
+              <input type="text" id="rgTitulo" class="admin-select" placeholder="Título del reglamento">
+            </div>
+            <div class="form-group">
+              <label class="form-label">URL del PDF o documento</label>
+              <input type="text" id="rgUrl" class="admin-select" placeholder="https://...">
+            </div>
+            <div class="form-row">
+              <div class="form-group" style="flex:1">
+                <label class="form-label">Orden</label>
+                <input type="number" id="rgOrden" class="admin-select" value="1" min="1">
+              </div>
+              <div class="form-group" style="flex:1">
+                <label class="form-label">Activo</label>
+                <select id="rgActivo" class="admin-select">
+                  <option value="1">Sí</option>
+                  <option value="0">No</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn-secondary" onclick="closeReglamentoModal()">Cancelar</button>
+            <button class="btn-primary" onclick="guardarReglamento()">Guardar</button>
           </div>
         </div>
       </div>
@@ -3512,7 +3629,7 @@ function showUltimosPartidos(equipo, btn) {
     var resClass = p.resultado === 'W' ? 'win' : (p.resultado === 'D' ? 'draw' : 'loss');
     html += '<div class="ultimos-item">' +
       '<span class="ultimos-fecha">F' + p.fecha + '</span>' +
-      '<span class="ultimos-rival">' + (p.local ? 'vs ' : '@ ') + escapeHTML(p.rival) + '</span>' +
+      '<span class="ultimos-rival">vs ' + escapeHTML(p.rival) + '</span>' +
       '<span class="ultimos-res ' + resClass + '">' + p.goles + '</span>' +
     '</div>';
   });
@@ -3523,25 +3640,35 @@ function showUltimosPartidos(equipo, btn) {
   popup.innerHTML = html;
   document.body.appendChild(popup);
   
-  // Posicionar cerca del botón
+  // Posicionar cerca del botón - usar position fixed para mejor control
   var rect = btn.getBoundingClientRect();
+  var popupRect = popup.getBoundingClientRect();
   
-  var left = rect.left + window.scrollX;
-  var top = rect.bottom + window.scrollY + 5;
+  // Calcular posición inicial (debajo del botón)
+  var left = rect.left;
+  var top = rect.bottom + 5;
   
+  // Ajustar si se sale por la derecha
+  if (left + popupRect.width > window.innerWidth - 10) {
+    left = window.innerWidth - popupRect.width - 10;
+  }
+  // Ajustar si se sale por la izquierda
+  if (left < 10) {
+    left = 10;
+  }
+  
+  // Ajustar si se sale por abajo - mostrar arriba del botón
+  if (top + popupRect.height > window.innerHeight - 10) {
+    top = rect.top - popupRect.height - 5;
+  }
+  // Si aún se sale por arriba, centrar verticalmente
+  if (top < 10) {
+    top = Math.max(10, (window.innerHeight - popupRect.height) / 2);
+  }
+  
+  popup.style.position = 'fixed';
   popup.style.left = left + 'px';
   popup.style.top = top + 'px';
-  
-  // Ajustar si se sale de pantalla
-  setTimeout(function() {
-    var popupRect = popup.getBoundingClientRect();
-    if (popupRect.right > window.innerWidth) {
-      popup.style.left = (window.innerWidth - popupRect.width - 10) + 'px';
-    }
-    if (popupRect.bottom > window.innerHeight) {
-      popup.style.top = (rect.top + window.scrollY - popupRect.height - 5) + 'px';
-    }
-  }, 0);
   
   ultimosPopup = popup;
   
@@ -4280,6 +4407,241 @@ async function guardarNuevoPartido() {
       alert('Partido creado correctamente');
     } else {
       alert('Error: ' + (json.error || 'No se pudo crear'));
+    }
+  } catch(e) {
+    alert('Error: ' + e.message);
+  }
+}
+
+// ═══ ADMIN SECTIONS ═══
+function showAdminSection(section, btn) {
+  // Ocultar todas las secciones
+  document.getElementById('adminSeccionPartidos').style.display = 'none';
+  document.getElementById('adminSeccionSponsors').style.display = 'none';
+  document.getElementById('adminSeccionReglamentos').style.display = 'none';
+  
+  // Desactivar todos los tabs
+  btn.parentElement.querySelectorAll('.tab-pill').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+  
+  // Mostrar sección seleccionada
+  if (section === 'partidos') {
+    document.getElementById('adminSeccionPartidos').style.display = '';
+  } else if (section === 'sponsors') {
+    document.getElementById('adminSeccionSponsors').style.display = '';
+    loadAdminSponsors();
+  } else if (section === 'reglamentos') {
+    document.getElementById('adminSeccionReglamentos').style.display = '';
+    loadAdminReglamentos();
+  }
+}
+
+// ═══ SPONSORS ADMIN ═══
+var adminSponsors = [];
+
+async function loadAdminSponsors() {
+  var container = document.getElementById('adminSponsorsList');
+  container.innerHTML = '<div class="loading"><div class="loading-spinner"></div><div class="loading-text">Cargando sponsors...</div></div>';
+  
+  try {
+    var data = await fetchAPI('getSponsors');
+    adminSponsors = data || [];
+    renderAdminSponsors();
+  } catch(e) {
+    container.innerHTML = '<div class="error-box">Error: ' + escapeHTML(e.message) + '</div>';
+  }
+}
+
+function renderAdminSponsors() {
+  var container = document.getElementById('adminSponsorsList');
+  if (!adminSponsors.length) {
+    container.innerHTML = '<div class="empty">No hay sponsors</div>';
+    return;
+  }
+  
+  var html = '<div class="card">';
+  adminSponsors.forEach(function(sp) {
+    html += '<div class="admin-match-row" onclick="editSponsor(' + sp.id + ')">' +
+      '<div class="match-teams">' +
+        '<strong>' + escapeHTML(sp.nombre || 'Sin nombre') + '</strong>' +
+        '<div style="font-size:11px;color:var(--text-dimmer)">Orden: ' + (sp.orden || 1) + ' · ' + (sp.activo ? '✓ Activo' : '✗ Inactivo') + '</div>' +
+      '</div>' +
+      '<div class="match-edit-icon">✏️</div>' +
+    '</div>';
+  });
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+function openSponsorModal(id) {
+  document.getElementById('sponsorModal').style.display = 'flex';
+  document.getElementById('spId').value = '';
+  document.getElementById('spNombre').value = '';
+  document.getElementById('spImagen').value = '';
+  document.getElementById('spLink').value = '';
+  document.getElementById('spOrden').value = '1';
+  document.getElementById('spActivo').value = '1';
+  document.getElementById('sponsorModalTitle').textContent = '➕ Nuevo Sponsor';
+}
+
+function editSponsor(id) {
+  var sp = adminSponsors.find(function(s) { return s.id === id; });
+  if (!sp) return;
+  
+  document.getElementById('sponsorModal').style.display = 'flex';
+  document.getElementById('spId').value = sp.id;
+  document.getElementById('spNombre').value = sp.nombre || '';
+  document.getElementById('spImagen').value = sp.imagen || sp.logo || '';
+  document.getElementById('spLink').value = sp.link || sp.url || '';
+  document.getElementById('spOrden').value = sp.orden || 1;
+  document.getElementById('spActivo').value = sp.activo ? '1' : '0';
+  document.getElementById('sponsorModalTitle').textContent = '✏️ Editar Sponsor';
+}
+
+function closeSponsorModal() {
+  document.getElementById('sponsorModal').style.display = 'none';
+}
+
+async function guardarSponsor() {
+  var id = document.getElementById('spId').value;
+  var nombre = document.getElementById('spNombre').value.trim();
+  var imagen = document.getElementById('spImagen').value.trim();
+  var link = document.getElementById('spLink').value.trim();
+  var orden = parseInt(document.getElementById('spOrden').value) || 1;
+  var activo = document.getElementById('spActivo').value === '1';
+  
+  if (!nombre) {
+    alert('Ingresá un nombre');
+    return;
+  }
+  
+  try {
+    var action = id ? 'admin_updateSponsor' : 'admin_createSponsor';
+    var res = await fetch(SUPABASE_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action: action,
+        token: adminState.token,
+        id: id ? parseInt(id) : undefined,
+        nombre: nombre,
+        imagen: imagen,
+        link: link,
+        orden: orden,
+        activo: activo
+      })
+    });
+    var json = await res.json();
+    
+    if (json.success) {
+      closeSponsorModal();
+      loadAdminSponsors();
+    } else {
+      alert('Error: ' + (json.error || 'No se pudo guardar'));
+    }
+  } catch(e) {
+    alert('Error: ' + e.message);
+  }
+}
+
+// ═══ REGLAMENTOS ADMIN ═══
+var adminReglamentos = [];
+
+async function loadAdminReglamentos() {
+  var container = document.getElementById('adminReglamentosList');
+  container.innerHTML = '<div class="loading"><div class="loading-spinner"></div><div class="loading-text">Cargando reglamentos...</div></div>';
+  
+  try {
+    var data = await fetchAPI('getReglamentos');
+    adminReglamentos = data || [];
+    renderAdminReglamentos();
+  } catch(e) {
+    container.innerHTML = '<div class="error-box">Error: ' + escapeHTML(e.message) + '</div>';
+  }
+}
+
+function renderAdminReglamentos() {
+  var container = document.getElementById('adminReglamentosList');
+  if (!adminReglamentos.length) {
+    container.innerHTML = '<div class="empty">No hay reglamentos</div>';
+    return;
+  }
+  
+  var html = '<div class="card">';
+  adminReglamentos.forEach(function(rg) {
+    html += '<div class="admin-match-row" onclick="editReglamento(' + rg.id + ')">' +
+      '<div class="match-teams">' +
+        '<strong>' + escapeHTML(rg.titulo || 'Sin título') + '</strong>' +
+        '<div style="font-size:11px;color:var(--text-dimmer)">Orden: ' + (rg.orden || 1) + ' · ' + (rg.activo ? '✓ Activo' : '✗ Inactivo') + '</div>' +
+      '</div>' +
+      '<div class="match-edit-icon">✏️</div>' +
+    '</div>';
+  });
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+function openReglamentoModal(id) {
+  document.getElementById('reglamentoModal').style.display = 'flex';
+  document.getElementById('rgId').value = '';
+  document.getElementById('rgTitulo').value = '';
+  document.getElementById('rgUrl').value = '';
+  document.getElementById('rgOrden').value = '1';
+  document.getElementById('rgActivo').value = '1';
+  document.getElementById('reglamentoModalTitle').textContent = '➕ Nuevo Reglamento';
+}
+
+function editReglamento(id) {
+  var rg = adminReglamentos.find(function(r) { return r.id === id; });
+  if (!rg) return;
+  
+  document.getElementById('reglamentoModal').style.display = 'flex';
+  document.getElementById('rgId').value = rg.id;
+  document.getElementById('rgTitulo').value = rg.titulo || '';
+  document.getElementById('rgUrl').value = rg.url || '';
+  document.getElementById('rgOrden').value = rg.orden || 1;
+  document.getElementById('rgActivo').value = rg.activo ? '1' : '0';
+  document.getElementById('reglamentoModalTitle').textContent = '✏️ Editar Reglamento';
+}
+
+function closeReglamentoModal() {
+  document.getElementById('reglamentoModal').style.display = 'none';
+}
+
+async function guardarReglamento() {
+  var id = document.getElementById('rgId').value;
+  var titulo = document.getElementById('rgTitulo').value.trim();
+  var url = document.getElementById('rgUrl').value.trim();
+  var orden = parseInt(document.getElementById('rgOrden').value) || 1;
+  var activo = document.getElementById('rgActivo').value === '1';
+  
+  if (!titulo) {
+    alert('Ingresá un título');
+    return;
+  }
+  
+  try {
+    var action = id ? 'admin_updateReglamento' : 'admin_createReglamento';
+    var res = await fetch(SUPABASE_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action: action,
+        token: adminState.token,
+        id: id ? parseInt(id) : undefined,
+        titulo: titulo,
+        url: url,
+        orden: orden,
+        activo: activo
+      })
+    });
+    var json = await res.json();
+    
+    if (json.success) {
+      closeReglamentoModal();
+      loadAdminReglamentos();
+    } else {
+      alert('Error: ' + (json.error || 'No se pudo guardar'));
     }
   } catch(e) {
     alert('Error: ' + e.message);
