@@ -251,8 +251,11 @@
   }
   [data-theme="dark"] .logo-mark {
     background: #fff;
-    border: 1px solid #fff;
-    padding: 1px;
+    border-radius: 6px;
+    padding: 0;
+  }
+  [data-theme="dark"] .logo-mark img {
+    border-radius: 6px;
   }
 
   .header-title {
@@ -622,7 +625,7 @@
     min-width: 80px;
   }
   [data-theme="dark"] .partido-sidebar {
-    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    background: linear-gradient(135deg, #334155 0%, #475569 100%);
   }
   [data-theme="green"] .partido-sidebar {
     background: linear-gradient(135deg, #065f46 0%, #10b981 100%);
@@ -831,7 +834,11 @@
 
   .standings-table td:nth-child(2) { text-align: left; }
   .standings-table tr:last-child td { border-bottom: none; }
-  .standings-table tr:hover td { background: #f8fafc; }
+  .standings-table tr:hover td { background: var(--bg4); }
+  [data-theme="dark"] .standings-table tr:hover td { 
+    background: #334155; 
+    color: #fff;
+  }
 
   .pos-num {
     font-family: 'Bebas Neue', sans-serif;
