@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- CDP Fixture — index.html — 2026-04-24 — SUPABASE -->
+<!-- CDP Fixture — index.html — 2026-04-27 18:45 ARG — SUPABASE -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -488,11 +488,24 @@
   }
 
   .partido-meta {
-    font-size: 11px;
-    color: var(--text-dimmer);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-dim);
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    border-radius: 20px;
+    padding: 8px 16px;
+    margin: 10px auto;
+    width: fit-content;
+  }
+  
+  .partido-meta-wrap {
     text-align: center;
-    padding: 6px 14px;
-    border-top: 1px solid var(--border);
+    padding: 4px 14px 10px;
   }
 
   .fixture-ver-btn { 
@@ -2324,6 +2337,32 @@ function escapeHTML(str) {
     .replace(/'/g, '&#39;');
 }
 
+// Formatea canchaHora como badge con íconos
+function formatCanchaHora(ch) {
+  if (!ch) return '';
+  var str = String(ch);
+  var parts = [];
+  
+  // Extraer hora (formato HH:MM o HH:MM:SS)
+  var horaMatch = str.match(/(\d{1,2}:\d{2})(:\d{2})?/);
+  if (horaMatch) {
+    parts.push('🕐 ' + horaMatch[1]);
+  }
+  
+  // Extraer cancha (Cancha X, C1, C2, o solo número después de guión)
+  var canchaMatch = str.match(/cancha\s*(\d+)/i) || str.match(/-\s*(\d+)\s*$/);
+  if (canchaMatch) {
+    parts.push('🏟️ Cancha ' + canchaMatch[1]);
+  }
+  
+  // Si no parseamos nada, devolver el string original escapado
+  if (parts.length === 0) {
+    return escapeHTML(str);
+  }
+  
+  return parts.join(' · ');
+}
+
 // ── Helper: fetch desde Supabase ─────────────────────────
 async function fetchAPI(action, params) {
   const url = new URL(SUPABASE_URL);
@@ -2764,7 +2803,7 @@ function filterByEquipo(equipo) {
           <div class="partido-equipo-score">${jugado ? p.golesV : '-'}</div>
         </div>
       </div>
-      ${p.canchaHora ? `<div class="partido-meta">${escapeHTML(p.canchaHora)}</div>` : ''}
+      ${p.canchaHora ? '<div class="partido-meta-wrap"><div class="partido-meta">' + formatCanchaHora(p.canchaHora) + '</div></div>' : ''}
       ${jugado ? `<div class="fixture-ver-btn" onclick="event.stopPropagation();toggleDetails('${pid}',${p.rowIndex||0},'${encodeURIComponent(p.partido||'')}')">▼ Ver detalles</div>` : ''}
       ${jugado ? `<div class="fixture-details" id="${pid}"></div>` : ''}
     </div>`;
