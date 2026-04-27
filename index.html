@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- CDP Fixture — index.html — 2026-04-27 18:45 ARG — SUPABASE -->
+<!-- CDP Fixture — index.html — 2026-04-27 19:10 ARG — SUPABASE -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -3627,26 +3627,39 @@ function adminRenderMatchList() {
 }
 
 function adminMatchRowHtml(m) {
-  const isPlayed = m.jugado === 'Jugado';
-  const isNR = m.jugado === 'NR';
-  const statusClass = isPlayed ? 'played' : (isNR ? 'nr' : 'pending');
-  const resultDisplay = isPlayed ? m.resultado : (isNR ? 'NR' : 'vs');
-  const statusBadge = isPlayed
+  // Soportar tanto formato Sheets (jugado='Jugado') como Supabase (jugado=true)
+  var isPlayed = m.jugado === true || m.jugado === 'Jugado';
+  var isNR = m.jugado === 'NR' || m.walkover;
+  var statusClass = isPlayed ? 'played' : (isNR ? 'nr' : 'pending');
+  
+  // Armar resultado desde golesL/golesV o desde resultado string
+  var resultDisplay = 'vs';
+  if (isPlayed) {
+    if (m.golesL !== undefined && m.golesL !== null) {
+      resultDisplay = m.golesL + ' - ' + m.golesV;
+    } else if (m.resultado) {
+      resultDisplay = m.resultado;
+    }
+  } else if (isNR) {
+    resultDisplay = 'NR';
+  }
+  
+  var statusBadge = isPlayed
     ? '<span class="badge" style="font-size:9px">✓ Jugado</span>'
     : (isNR ? '<span class="badge yellow" style="font-size:9px">NR</span>' : '<span class="badge gray" style="font-size:9px">Pendiente</span>');
 
-  return `<div class="admin-match-row ${statusClass}" onclick="adminOpenMatch(${m.rowIndex})">
-    <div class="match-teams">
-      <strong>${m.equipoL || '?'} vs ${m.equipoV || '?'}</strong>
-      <div style="font-size:11px;color:var(--text-dimmer);margin-top:2px">${m.fecha} ${statusBadge}</div>
-    </div>
-    <div class="match-result">${resultDisplay}</div>
-    <div class="match-edit-icon">✏️</div>
-  </div>`;
+  return '<div class="admin-match-row ' + statusClass + '" onclick="adminOpenMatch(' + m.rowIndex + ')">' +
+    '<div class="match-teams">' +
+      '<strong>' + (m.equipoL || '?') + ' vs ' + (m.equipoV || '?') + '</strong>' +
+      '<div style="font-size:11px;color:var(--text-dimmer);margin-top:2px">' + m.fecha + ' ' + statusBadge + '</div>' +
+    '</div>' +
+    '<div class="match-result">' + resultDisplay + '</div>' +
+    '<div class="match-edit-icon">✏️</div>' +
+  '</div>';
 }
 
 async function adminOpenMatch(rowIndex) {
-  const match = adminState.matches.find(m => m.rowIndex === rowIndex);
+  var match = adminState.matches.find(function(m) { return m.rowIndex === rowIndex; });
   if (!match) return;
 
   adminState.currentMatch = match;
@@ -3662,11 +3675,16 @@ async function adminOpenMatch(rowIndex) {
   document.getElementById('editorEqL').textContent = match.equipoL;
   document.getElementById('editorEqV').textContent = match.equipoV;
 
-  // Set resultado
-  const jugado = match.jugado || '';
-
-  const resL = match.resLocal === 'NR' ? 0 : (parseInt(match.resLocal) || 0);
-  const resV = match.resVisitante === 'NR' ? 0 : (parseInt(match.resVisitante) || 0);
+  // Set resultado - soportar tanto golesL/golesV como resLocal/resVisitante
+  var resL = 0;
+  var resV = 0;
+  if (match.golesL !== undefined && match.golesL !== null) {
+    resL = parseInt(match.golesL) || 0;
+    resV = parseInt(match.golesV) || 0;
+  } else {
+    resL = match.resLocal === 'NR' ? 0 : (parseInt(match.resLocal) || 0);
+    resV = match.resVisitante === 'NR' ? 0 : (parseInt(match.resVisitante) || 0);
+  }
   document.getElementById('editorGolesL').value = resL;
   document.getElementById('editorGolesV').value = resV;
   actualizarJugadoBadge();
@@ -3681,29 +3699,38 @@ async function adminOpenMatch(rowIndex) {
 
   // Init editor data from existing match data
   adminState.editorData = {
-    goleadoresL: (match.goleadoresL || []).map(g => ({ jugador: g.jugador, goles: g.goles })),
-    goleadoresV: (match.goleadoresV || []).map(g => ({ jugador: g.jugador, goles: g.goles })),
-    amonestadosL: [...(match.amonestadosL || [])],
-    amonestadosV: [...(match.amonestadosV || [])],
-    rojasL: [...(match.rojasL || [])],
-    rojasV: [...(match.rojasV || [])]
+    goleadoresL: (match.goleadoresL || []).map(function(g) { return { jugador: g.jugador, goles: g.goles }; }),
+    goleadoresV: (match.goleadoresV || []).map(function(g) { return { jugador: g.jugador, goles: g.goles }; }),
+    amonestadosL: (match.amonestadosL || []).slice(),
+    amonestadosV: (match.amonestadosV || []).slice(),
+    rojasL: (match.rojasL || []).slice(),
+    rojasV: (match.rojasV || []).slice()
   };
 
-  // Load goleadores from Apps Script
+  // Load incidencias desde el backend
   try {
-      const partidoEnc = encodeURIComponent(match.partido || '');
-      const url = SUPABASE_URL + '?action=getMatchDetail&rowIndex=' + rowIndex + (partidoEnc ? '&partido=' + partidoEnc : '');
-      const res = await fetch(url);
-      const json = await res.json();
-      if (json.ok) {
-        adminState.editorData.goleadoresL = (json.goleadoresL || []).map(g => ({ jugador: g.jugador, goles: g.goles }));
-        adminState.editorData.goleadoresV = (json.goleadoresV || []).map(g => ({ jugador: g.jugador, goles: g.goles }));
-        adminState.editorData.amonestadosL = json.amonestadosL || [];
-        adminState.editorData.amonestadosV = json.amonestadosV || [];
-        adminState.editorData.rojasL = json.rojasL || [];
-        adminState.editorData.rojasV = json.rojasV || [];
-      }
-    } catch(e) { /* fallback to local data */ }
+    var partidoEnc = encodeURIComponent(match.partido || '');
+    var url = SUPABASE_URL + '?action=getMatchDetail&rowIndex=' + rowIndex + (partidoEnc ? '&partido=' + partidoEnc : '');
+    var res = await fetch(url);
+    var json = await res.json();
+    if (json.success && json.data) {
+      var d = json.data;
+      adminState.editorData.goleadoresL = (d.goleadoresL || []).map(function(g) { return { jugador: g.jugador, goles: g.goles }; });
+      adminState.editorData.goleadoresV = (d.goleadoresV || []).map(function(g) { return { jugador: g.jugador, goles: g.goles }; });
+      adminState.editorData.amonestadosL = d.amonestadosL || [];
+      adminState.editorData.amonestadosV = d.amonestadosV || [];
+      adminState.editorData.rojasL = d.rojasL || [];
+      adminState.editorData.rojasV = d.rojasV || [];
+    } else if (json.ok) {
+      // Formato alternativo (Sheets)
+      adminState.editorData.goleadoresL = (json.goleadoresL || []).map(function(g) { return { jugador: g.jugador, goles: g.goles }; });
+      adminState.editorData.goleadoresV = (json.goleadoresV || []).map(function(g) { return { jugador: g.jugador, goles: g.goles }; });
+      adminState.editorData.amonestadosL = json.amonestadosL || [];
+      adminState.editorData.amonestadosV = json.amonestadosV || [];
+      adminState.editorData.rojasL = json.rojasL || [];
+      adminState.editorData.rojasV = json.rojasV || [];
+    }
+  } catch(e) { /* fallback to local data */ }
 
   // Render current tags
   renderPlayerTags();
