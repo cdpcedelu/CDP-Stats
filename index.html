@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- CDP Fixture — index.html — 2026-04-27 21:32 ARG — SUPABASE -->
+<!-- CDP Fixture — index.html — 2026-04-27 22:00 ARG — SUPABASE -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -73,6 +73,13 @@
     --shadow-sm: 0 1px 2px rgba(0,0,0,0.4);
     --header-bg: rgba(20,28,43,0.95);
     --nav-bg: #141c2b;
+  }
+
+  [data-theme="dark"] .nav-inner {
+    border-color: #fff;
+  }
+  [data-theme="dark"] .nav-pill {
+    border-color: #fff;
   }
 
   [data-theme="green"] {
@@ -2302,8 +2309,8 @@
               <input type="text" id="spNombre" class="admin-select" placeholder="Nombre del sponsor">
             </div>
             <div class="form-group">
-              <label class="form-label">URL de la imagen (logo)</label>
-              <input type="text" id="spImagen" class="admin-select" placeholder="https://...">
+              <label class="form-label">URL del Logo</label>
+              <input type="text" id="spLogo" class="admin-select" placeholder="https://...">
             </div>
             <div class="form-group">
               <label class="form-label">Link (opcional)</label>
@@ -4444,8 +4451,17 @@ async function loadAdminSponsors() {
   container.innerHTML = '<div class="loading"><div class="loading-spinner"></div><div class="loading-text">Cargando sponsors...</div></div>';
   
   try {
-    var data = await fetchAPI('getSponsors');
-    adminSponsors = data || [];
+    // Usar el endpoint admin que trae todos (incluso inactivos)
+    var res = await fetch(SUPABASE_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action: 'admin_getSponsors',
+        token: adminState.token
+      })
+    });
+    var json = await res.json();
+    adminSponsors = (json.success && json.data) ? json.data : [];
     renderAdminSponsors();
   } catch(e) {
     container.innerHTML = '<div class="error-box">Error: ' + escapeHTML(e.message) + '</div>';
@@ -4462,13 +4478,14 @@ function renderAdminSponsors() {
   var html = '<div class="card">';
   adminSponsors.forEach(function(sp, idx) {
     var spId = sp.id || sp.ID || idx;
-    var imgUrl = sp.imagen || sp.logo || sp.img || '';
+    var imgUrl = sp.logo_url || sp.imagen || sp.logo || '';
+    var nombre = sp.nombre || sp.Sponsor || 'Sin nombre';
     html += '<div class="admin-match-row" style="cursor:pointer" onclick="editSponsor(' + spId + ')">' +
       '<div style="display:flex;align-items:center;gap:12px;flex:1">' +
-        (imgUrl ? '<img src="' + escapeHTML(imgUrl) + '" style="width:40px;height:40px;object-fit:contain;border-radius:6px;background:#fff">' : '<div style="width:40px;height:40px;background:var(--bg4);border-radius:6px;display:flex;align-items:center;justify-content:center">📷</div>') +
+        (imgUrl ? '<img src="' + escapeHTML(imgUrl) + '" style="width:40px;height:40px;object-fit:contain;border-radius:6px;background:#fff">' : '<div style="width:40px;height:40px;background:var(--bg4);border-radius:6px;display:flex;align-items:center;justify-content:center">⭐</div>') +
         '<div>' +
-          '<strong>' + escapeHTML(sp.nombre || 'Sin nombre') + '</strong>' +
-          '<div style="font-size:11px;color:var(--text-dimmer)">Orden: ' + (sp.orden || 1) + ' · ' + (sp.activo ? '✓ Activo' : '✗ Inactivo') + '</div>' +
+          '<strong>' + escapeHTML(nombre) + '</strong>' +
+          '<div style="font-size:11px;color:var(--text-dimmer)">Orden: ' + (sp.orden || 1) + ' · ' + (sp.activo !== false ? '✓ Activo' : '✗ Inactivo') + '</div>' +
         '</div>' +
       '</div>' +
       '<div class="match-edit-icon">✏️</div>' +
@@ -4482,7 +4499,7 @@ function openSponsorModal(id) {
   document.getElementById('sponsorModal').style.display = 'flex';
   document.getElementById('spId').value = '';
   document.getElementById('spNombre').value = '';
-  document.getElementById('spImagen').value = '';
+  document.getElementById('spLogo').value = '';
   document.getElementById('spLink').value = '';
   document.getElementById('spOrden').value = '1';
   document.getElementById('spActivo').value = '1';
@@ -4501,10 +4518,10 @@ function editSponsor(id) {
   document.getElementById('sponsorModal').style.display = 'flex';
   document.getElementById('spId').value = sp.id || sp.ID || '';
   document.getElementById('spNombre').value = sp.nombre || '';
-  document.getElementById('spImagen').value = sp.imagen || sp.logo || sp.img || '';
-  document.getElementById('spLink').value = sp.link || sp.url || '';
+  document.getElementById('spLogo').value = sp.logo_url || '';
+  document.getElementById('spLink').value = sp.link_url || '';
   document.getElementById('spOrden').value = sp.orden || 1;
-  document.getElementById('spActivo').value = sp.activo ? '1' : '0';
+  document.getElementById('spActivo').value = sp.activo !== false ? '1' : '0';
   document.getElementById('sponsorModalTitle').textContent = '✏️ Editar Sponsor';
 }
 
@@ -4515,8 +4532,8 @@ function closeSponsorModal() {
 async function guardarSponsor() {
   var id = document.getElementById('spId').value;
   var nombre = document.getElementById('spNombre').value.trim();
-  var imagen = document.getElementById('spImagen').value.trim();
-  var link = document.getElementById('spLink').value.trim();
+  var logo_url = document.getElementById('spLogo').value.trim();
+  var link_url = document.getElementById('spLink').value.trim();
   var orden = parseInt(document.getElementById('spOrden').value) || 1;
   var activo = document.getElementById('spActivo').value === '1';
   
@@ -4535,8 +4552,8 @@ async function guardarSponsor() {
         token: adminState.token,
         id: id ? parseInt(id) : undefined,
         nombre: nombre,
-        imagen: imagen,
-        link: link,
+        logo_url: logo_url,
+        link_url: link_url,
         orden: orden,
         activo: activo
       })
@@ -4562,8 +4579,16 @@ async function loadAdminReglamentos() {
   container.innerHTML = '<div class="loading"><div class="loading-spinner"></div><div class="loading-text">Cargando reglamentos...</div></div>';
   
   try {
-    var data = await fetchAPI('getReglamentos');
-    adminReglamentos = data || [];
+    var res = await fetch(SUPABASE_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action: 'admin_getReglamentos',
+        token: adminState.token
+      })
+    });
+    var json = await res.json();
+    adminReglamentos = (json.success && json.data) ? json.data : [];
     renderAdminReglamentos();
   } catch(e) {
     container.innerHTML = '<div class="error-box">Error: ' + escapeHTML(e.message) + '</div>';
