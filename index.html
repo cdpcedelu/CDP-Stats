@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- CDP Fixture — index.html — 2026-04-27 20:10 ARG — SUPABASE -->
+<!-- CDP Fixture — index.html — 2026-04-27 20:35 ARG — SUPABASE -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -771,9 +771,18 @@
     font-weight: 700;
     color: var(--text);
     letter-spacing: 0.2px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+  .team-name-text {
     white-space: nowrap;
-    display: inline-flex;
+  }
+  .team-stats-row {
+    display: flex;
     align-items: center;
+    gap: 4px;
     flex-wrap: nowrap;
   }
 
@@ -800,6 +809,21 @@
   .dif-badge.pos { background: #dcfce7; color: #16a34a; }
   .dif-badge.neg { background: #fee2e2; color: #dc2626; }
   .dif-badge.zero { background: #e2e8f0; color: #64748b; }
+
+  /* Botón Ver más goleadores */
+  .ver-mas-btn {
+    text-align: center;
+    padding: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--green);
+    cursor: pointer;
+    border-top: 1px solid var(--border2);
+    background: var(--bg3);
+  }
+  .ver-mas-btn:hover {
+    background: var(--bg4);
+  }
 
   /* GOLEADORES */
   .scorer-row {
@@ -1810,7 +1834,7 @@
     border-radius: 50%;
   }
   .racha-dot.win { background: #16a34a; }
-  .racha-dot.draw { background: #d97706; }
+  .racha-dot.draw { background: #facc15; }
   .racha-dot.loss { background: #dc2626; }
   
   .racha-btn {
@@ -1824,6 +1848,25 @@
   .racha-btn:hover .racha-dot {
     transform: scale(1.2);
   }
+
+  /* ═══ BADGE POSICIÓN EN FIXTURE ═══ */
+  .pos-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    height: 18px;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-dim);
+    background: var(--bg4);
+    border-radius: 4px;
+    margin-left: 6px;
+    padding: 0 4px;
+  }
+  .pos-badge.top { background: rgba(22,163,74,0.15); color: #16a34a; }
+  .pos-badge.mid { background: rgba(217,119,6,0.15); color: #d97706; }
+  .pos-badge.bottom { background: rgba(220,38,38,0.15); color: #dc2626; }
 
   /* ═══ POPUP ÚLTIMOS PARTIDOS ═══ */
   .ultimos-popup {
@@ -3052,12 +3095,12 @@ function filterByEquipo(equipo) {
       <div class="partido-header">
         <div class="partido-equipo-row">
           ${escudoLocal}
-          <div class="partido-equipo-nombre">${escapeHTML(local)}<button class="racha-btn" onclick="event.stopPropagation();showUltimosPartidos('${escapeHTML(local).replace(/'/g, "\\'")}', this)">${getRachaDotsHtml(local)}</button></div>
+          <div class="partido-equipo-nombre">${escapeHTML(local)}${getPosBadgeHtml(local)}<button class="racha-btn" data-equipo="${escapeHTML(local)}" onclick="event.stopPropagation();showUltimosPartidos(this.dataset.equipo, this)">${getRachaDotsHtml(local)}</button></div>
           <div class="partido-equipo-score">${jugado ? p.golesL : '-'}</div>
         </div>
         <div class="partido-equipo-row">
           ${escudoVisit}
-          <div class="partido-equipo-nombre">${escapeHTML(visitante)}<button class="racha-btn" onclick="event.stopPropagation();showUltimosPartidos('${escapeHTML(visitante).replace(/'/g, "\\'")}', this)">${getRachaDotsHtml(visitante)}</button></div>
+          <div class="partido-equipo-nombre">${escapeHTML(visitante)}${getPosBadgeHtml(visitante)}<button class="racha-btn" data-equipo="${escapeHTML(visitante)}" onclick="event.stopPropagation();showUltimosPartidos(this.dataset.equipo, this)">${getRachaDotsHtml(visitante)}</button></div>
           <div class="partido-equipo-score">${jugado ? p.golesV : '-'}</div>
         </div>
       </div>
@@ -3149,8 +3192,7 @@ function renderPos(view) {
   var isGeneral = view.includes('general');
   var isSenior = view.includes('senior');
   
-  // Calcular posiciones anteriores y rachas
-  var posAnteriores = calcularPosicionesAnteriores(view);
+  // Calcular rachas
   calcularRachasEquipos();
 
   var html = '<div class="card">' +
@@ -3203,24 +3245,10 @@ function renderPos(view) {
     var difBadgeClass = difNum > 0 ? 'pos' : (difNum < 0 ? 'neg' : 'zero');
     var difBadgeText = difNum > 0 ? '+' + difNum : String(difNum);
     
-    // Indicador de cambio de posición
-    var posChangeHtml = '';
-    var posAnt = posAnteriores[equipo];
-    if (posAnt !== undefined && parseInt(pj) > 0) {
-      var cambio = posAnt - pos;
-      if (cambio > 0) {
-        posChangeHtml = '<span class="pos-change up">▲' + cambio + '</span>';
-      } else if (cambio < 0) {
-        posChangeHtml = '<span class="pos-change down">▼' + Math.abs(cambio) + '</span>';
-      } else {
-        posChangeHtml = '<span class="pos-change same">—</span>';
-      }
-    }
-    
-    // Racha de últimos 3 partidos
+    // Racha de últimos 3 partidos - usar data attribute para evitar problemas con comillas
     var rachaHtml = getRachaDotsHtml(equipo);
     if (rachaHtml) {
-      rachaHtml = '<button class="racha-btn" onclick="event.stopPropagation();showUltimosPartidos(\'' + escapeHTML(equipo).replace(/'/g, "\\'") + '\', this)">' + rachaHtml + '</button>';
+      rachaHtml = '<button class="racha-btn" data-equipo="' + escapeHTML(equipo) + '" onclick="event.stopPropagation();showUltimosPartidos(this.dataset.equipo, this)">' + rachaHtml + '</button>';
     }
     
     html += '<tr>' +
@@ -3228,7 +3256,10 @@ function renderPos(view) {
       '<td>' +
         '<div class="team-cell">' +
           getEscudo(equipo, 28) +
-          '<div class="team-name-cell">' + escapeHTML(equipo) + '<span class="dif-badge ' + difBadgeClass + '">' + difBadgeText + '</span>' + posChangeHtml + rachaHtml + '</div>' +
+          '<div class="team-name-cell">' +
+            '<span class="team-name-text">' + escapeHTML(equipo) + '</span>' +
+            '<span class="team-stats-row"><span class="dif-badge ' + difBadgeClass + '">' + difBadgeText + '</span>' + rachaHtml + '</span>' +
+          '</div>' +
         '</div>' +
       '</td>' +
       '<td class="stat-cell">' + pj + '</td>' +
@@ -3373,7 +3404,23 @@ function calcularRachasEquipos() {
 // Generar HTML de los dots de racha
 function getRachaDotsHtml(equipo) {
   calcularRachasEquipos();
-  var partidos = state.partidosPorEquipo && state.partidosPorEquipo[equipo];
+  
+  // Buscar case-insensitive
+  var partidos = null;
+  if (state.partidosPorEquipo) {
+    if (state.partidosPorEquipo[equipo]) {
+      partidos = state.partidosPorEquipo[equipo];
+    } else {
+      var equipoLower = equipo.toLowerCase();
+      for (var key in state.partidosPorEquipo) {
+        if (key.toLowerCase() === equipoLower) {
+          partidos = state.partidosPorEquipo[key];
+          break;
+        }
+      }
+    }
+  }
+  
   if (!partidos || !partidos.length) return '';
   
   var dots = partidos.slice(0, 3).map(function(p) {
@@ -3382,6 +3429,47 @@ function getRachaDotsHtml(equipo) {
   }).join('');
   
   return '<span class="racha-dots">' + dots + '</span>';
+}
+
+// Obtener posición del equipo en la tabla
+function getPosicionEquipo(equipo) {
+  // Buscar en todas las tablas de posiciones cargadas
+  var vistas = ['zona-a-libres', 'zona-b-libres', 'general-senior'];
+  for (var i = 0; i < vistas.length; i++) {
+    var vista = vistas[i];
+    var data = state.posiciones[vista];
+    if (data && data.length) {
+      for (var j = 0; j < data.length; j++) {
+        var row = data[j];
+        var nombreEquipo = row['Equipo'] || row['Equipo '] || row['Equipos'] || '';
+        if (nombreEquipo.toLowerCase() === equipo.toLowerCase()) {
+          return { pos: j + 1, total: data.length };
+        }
+      }
+    }
+  }
+  return null;
+}
+
+// Generar HTML del badge de posición
+function getPosBadgeHtml(equipo) {
+  var posData = getPosicionEquipo(equipo);
+  if (!posData) return '';
+  
+  var pos = posData.pos;
+  var total = posData.total;
+  var cls = '';
+  
+  // top 33% verde, medio 33% amarillo, bottom 33% rojo
+  if (pos <= Math.ceil(total / 3)) {
+    cls = 'top';
+  } else if (pos <= Math.ceil(total * 2 / 3)) {
+    cls = 'mid';
+  } else {
+    cls = 'bottom';
+  }
+  
+  return '<span class="pos-badge ' + cls + '">' + pos + '°</span>';
 }
 
 // Mostrar popup con últimos partidos
@@ -3394,12 +3482,32 @@ function showUltimosPartidos(equipo, btn) {
   }
   
   calcularRachasEquipos();
-  var partidos = state.partidosPorEquipo && state.partidosPorEquipo[equipo];
+  
+  // Buscar case-insensitive
+  var partidos = null;
+  var equipoKey = equipo;
+  if (state.partidosPorEquipo) {
+    // Primero buscar exacto
+    if (state.partidosPorEquipo[equipo]) {
+      partidos = state.partidosPorEquipo[equipo];
+    } else {
+      // Buscar case-insensitive
+      var equipoLower = equipo.toLowerCase();
+      for (var key in state.partidosPorEquipo) {
+        if (key.toLowerCase() === equipoLower) {
+          partidos = state.partidosPorEquipo[key];
+          equipoKey = key;
+          break;
+        }
+      }
+    }
+  }
+  
   if (!partidos || !partidos.length) return;
   
   var ultimos = partidos.slice(0, 3);
   
-  var html = '<div class="ultimos-popup-title">Últimos partidos de ' + escapeHTML(equipo) + '</div>';
+  var html = '<div class="ultimos-popup-title">Últimos partidos de ' + escapeHTML(equipoKey) + '</div>';
   ultimos.forEach(function(p) {
     var resClass = p.resultado === 'W' ? 'win' : (p.resultado === 'D' ? 'draw' : 'loss');
     html += '<div class="ultimos-item">' +
@@ -3512,33 +3620,50 @@ function filterScorers(query) {
   });
 }
 
-function renderScorers(view) {
-  const data = state.goleadores[view];
+function renderScorers(view, showAll) {
+  var data = state.goleadores[view];
   if (!data || !data.length) {
     document.getElementById('scorersContainer').innerHTML = '<div class="empty">Sin datos disponibles</div>';
     return;
   }
 
-  let html = '<div class="card">';
-  data.forEach((p, i) => {
-    const rank = i + 1;
-    const rankClass = rank === 1 ? 'gold' : rank === 2 ? 'silver' : rank === 3 ? 'bronze' : '';
-    const goals = p['Total'] || 0;
-    html += `<div class="scorer-row">
-      <div class="scorer-rank ${rankClass}">${rank}</div>
-      <div class="scorer-info">
-        <div class="scorer-name">${p['Jugador'] || '-'}</div>
-        <div class="scorer-team" style="display:flex;align-items:center;gap:5px">
-          ${getEscudo(p['Equipo'] || '', 18)}
-          <span>${p['Equipo'] || '-'}</span>
-        </div>
-      </div>
-      <div>
-        <div class="scorer-goals">${goals}</div>
-        <div class="goals-label">goles</div>
-      </div>
-    </div>`;
+  // Separar: 2+ goles vs 1 gol
+  var conDosOMas = data.filter(function(p) { return (p['Total'] || 0) >= 2; });
+  var conUno = data.filter(function(p) { return (p['Total'] || 0) === 1; });
+  
+  // Si showAll, mostrar todos; sino solo los de 2+
+  var toShow = showAll ? data : conDosOMas;
+
+  var html = '<div class="card">';
+  toShow.forEach(function(p, i) {
+    var rank = i + 1;
+    var rankClass = rank === 1 ? 'gold' : rank === 2 ? 'silver' : rank === 3 ? 'bronze' : '';
+    var goals = p['Total'] || 0;
+    html += '<div class="scorer-row">' +
+      '<div class="scorer-rank ' + rankClass + '">' + rank + '</div>' +
+      '<div class="scorer-info">' +
+        '<div class="scorer-name">' + (p['Jugador'] || '-') + '</div>' +
+        '<div class="scorer-team" style="display:flex;align-items:center;gap:5px">' +
+          getEscudo(p['Equipo'] || '', 18) +
+          '<span>' + (p['Equipo'] || '-') + '</span>' +
+        '</div>' +
+      '</div>' +
+      '<div>' +
+        '<div class="scorer-goals">' + goals + '</div>' +
+        '<div class="goals-label">goles</div>' +
+      '</div>' +
+    '</div>';
   });
+  
+  // Botón Ver más / Ocultar
+  if (conUno.length > 0) {
+    if (!showAll) {
+      html += '<div class="ver-mas-btn" onclick="renderScorers(\'' + view + '\', true)">Ver ' + conUno.length + ' jugadores con 1 gol</div>';
+    } else {
+      html += '<div class="ver-mas-btn" onclick="renderScorers(\'' + view + '\', false)">Ocultar jugadores con 1 gol</div>';
+    }
+  }
+  
   html += '</div>';
   document.getElementById('scorersContainer').innerHTML = html;
   document.getElementById('scorerSearchWrap').style.display = '';
