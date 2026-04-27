@@ -545,11 +545,11 @@
     background: var(--bg2);
     border: 2px solid var(--border2);
     border-radius: 14px;
-    padding: 0;
     margin-bottom: 10px;
     overflow: hidden;
     box-shadow: var(--shadow-sm);
     transition: all 0.2s;
+    display: flex;
   }
 
   .partido-row:hover {
@@ -561,9 +561,15 @@
   .partido-row.pendiente { border-color: #333; }
   .partido-row.senior { border-color: var(--gold); }
 
+  .partido-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
   .partido-header {
-    background: var(--bg4);
     padding: 12px 14px;
+    flex: 1;
   }
 
   .partido-equipo-row {
@@ -577,8 +583,8 @@
   }
 
   .partido-equipo-row .team-shield {
-    width: 36px;
-    height: 36px;
+    width: 32px;
+    height: 32px;
     flex-shrink: 0;
   }
 
@@ -592,32 +598,50 @@
 
   .partido-equipo-score {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 26px;
+    font-size: 24px;
     font-weight: 400;
     color: var(--text);
     min-width: 28px;
     text-align: center;
   }
 
-  .partido-meta {
-    display: inline-flex;
-    align-items: center;
+  /* Panel lateral hora/cancha estilo ESPN */
+  .partido-sidebar {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    color: #fff;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
     justify-content: center;
-    gap: 8px;
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--text-dim);
-    background: var(--bg3);
-    border: 1px solid var(--border2);
-    border-radius: 20px;
-    padding: 8px 16px;
-    margin: 10px auto;
-    width: fit-content;
+    align-items: center;
+    min-width: 80px;
   }
-  
+  [data-theme="dark"] .partido-sidebar {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  }
+  [data-theme="green"] .partido-sidebar {
+    background: linear-gradient(135deg, #065f46 0%, #047857 100%);
+  }
+  [data-theme="blue"] .partido-sidebar {
+    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+  }
+  .partido-sidebar-hora {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+  }
+  .partido-sidebar-cancha {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.85;
+    margin-top: 2px;
+  }
+
+  /* Ocultar viejo meta */
   .partido-meta-wrap {
-    text-align: center;
-    padding: 4px 14px 10px;
+    display: none;
   }
 
   .fixture-ver-btn { 
@@ -3403,22 +3427,39 @@ function filterByEquipo(equipo) {
       detHtmlV = incV.length ? incV.join('') : '<div class="details-empty" style="text-align:right">Sin incidencias</div>';
     }
 
+    // Extraer hora y cancha para el sidebar
+    let horaStr = '', canchaStr = '';
+    if (p.canchaHora) {
+      const ch = String(p.canchaHora);
+      const horaMatch = ch.match(/(\d{1,2}:\d{2})/);
+      const canchaMatch = ch.match(/cancha\s*(\d+)/i) || ch.match(/-\s*(\d+)\s*$/);
+      if (horaMatch) horaStr = horaMatch[1] + ' hs';
+      if (canchaMatch) canchaStr = 'Cancha ' + canchaMatch[1];
+    }
+    const sidebarHtml = (horaStr || canchaStr) ? `
+      <div class="partido-sidebar">
+        ${horaStr ? `<div class="partido-sidebar-hora">${horaStr}</div>` : ''}
+        ${canchaStr ? `<div class="partido-sidebar-cancha">${canchaStr}</div>` : ''}
+      </div>` : '';
+
     html += `<div class="partido-row ${rowClass}">
-      <div class="partido-header">
-        <div class="partido-equipo-row">
-          ${escudoLocal}
-          <div class="partido-equipo-nombre">${escapeHTML(local)}${getPosBadgeHtml(local)}<button class="racha-btn" data-equipo="${escapeHTML(local)}" onclick="event.stopPropagation();showUltimosPartidos(this.dataset.equipo, this)">${getRachaDotsHtml(local)}</button></div>
-          <div class="partido-equipo-score">${jugado ? p.golesL : '-'}</div>
+      <div class="partido-content">
+        <div class="partido-header">
+          <div class="partido-equipo-row">
+            ${escudoLocal}
+            <div class="partido-equipo-nombre">${escapeHTML(local)}${getPosBadgeHtml(local)}<button class="racha-btn" data-equipo="${escapeHTML(local)}" onclick="event.stopPropagation();showUltimosPartidos(this.dataset.equipo, this)">${getRachaDotsHtml(local)}</button></div>
+            <div class="partido-equipo-score">${jugado ? p.golesL : '-'}</div>
+          </div>
+          <div class="partido-equipo-row">
+            ${escudoVisit}
+            <div class="partido-equipo-nombre">${escapeHTML(visitante)}${getPosBadgeHtml(visitante)}<button class="racha-btn" data-equipo="${escapeHTML(visitante)}" onclick="event.stopPropagation();showUltimosPartidos(this.dataset.equipo, this)">${getRachaDotsHtml(visitante)}</button></div>
+            <div class="partido-equipo-score">${jugado ? p.golesV : '-'}</div>
+          </div>
         </div>
-        <div class="partido-equipo-row">
-          ${escudoVisit}
-          <div class="partido-equipo-nombre">${escapeHTML(visitante)}${getPosBadgeHtml(visitante)}<button class="racha-btn" data-equipo="${escapeHTML(visitante)}" onclick="event.stopPropagation();showUltimosPartidos(this.dataset.equipo, this)">${getRachaDotsHtml(visitante)}</button></div>
-          <div class="partido-equipo-score">${jugado ? p.golesV : '-'}</div>
-        </div>
+        ${jugado ? `<div class="fixture-ver-btn" onclick="event.stopPropagation();toggleDetails('${pid}',${p.rowIndex||0},'${encodeURIComponent(p.partido||'')}')">▼ Ver detalles</div>` : ''}
+        ${jugado ? `<div class="fixture-details" id="${pid}"></div>` : ''}
       </div>
-      ${p.canchaHora ? '<div class="partido-meta-wrap"><div class="partido-meta">' + formatCanchaHora(p.canchaHora) + '</div></div>' : ''}
-      ${jugado ? `<div class="fixture-ver-btn" onclick="event.stopPropagation();toggleDetails('${pid}',${p.rowIndex||0},'${encodeURIComponent(p.partido||'')}')">▼ Ver detalles</div>` : ''}
-      ${jugado ? `<div class="fixture-details" id="${pid}"></div>` : ''}
+      ${sidebarHtml}
     </div>`;
   });
 
