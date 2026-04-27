@@ -268,6 +268,30 @@
 
   .header-info { flex: 1; }
 
+  /* Hamburguesa mobile */
+  .header-hamburger {
+    display: none;
+    background: none;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+    margin-left: 8px;
+  }
+  .header-hamburger svg {
+    width: 24px;
+    height: 24px;
+    stroke: var(--text);
+    stroke-width: 2;
+    fill: none;
+  }
+  @media (max-width: 640px) {
+    .header-hamburger {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
   .status-dot {
     width: 8px;
     height: 8px;
@@ -358,52 +382,24 @@
     vertical-align: -2px;
   }
 
-  /* Menú Más - solo visible en mobile */
+  /* Menú Más - DESHABILITADO en nav, ahora usa hamburguesa en header */
   .nav-more-btn {
-    display: none;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    color: var(--text-dim);
-    background: none;
-    border: none;
-    padding: 10px 12px;
-    cursor: pointer;
-    align-items: center;
-    gap: 4px;
-    position: relative;
-    z-index: 2;
-    margin-left: auto;
-  }
-  .nav-more-btn:hover { color: var(--text); }
-  .nav-more-btn svg {
-    width: 12px;
-    height: 12px;
-    stroke: currentColor;
-    stroke-width: 2.5;
-    fill: none;
-    transition: transform 0.2s;
-  }
-  .nav-more-btn.open svg {
-    transform: rotate(180deg);
+    display: none !important;
   }
 
-  /* Dropdown del menú Más */
+  /* Dropdown del menú hamburguesa */
   .nav-dropdown {
     display: none;
-    position: absolute;
-    top: 100%;
-    right: 8px;
-    margin-top: 6px;
+    position: fixed;
+    top: 70px;
+    right: 12px;
     background: var(--bg2);
     border: 1px solid var(--border2);
     border-radius: 12px;
     padding: 8px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.15);
     z-index: 9999;
-    min-width: 150px;
+    min-width: 160px;
   }
   .nav-dropdown.show {
     display: block;
@@ -2060,13 +2056,16 @@
 <header class="header">
   <div class="header-inner">
     <div class="logo-mark">
-      <img src="escudos/logo_0.png" alt="CDP" style="width:100%;height:100%;object-fit:contain;padding:4px;"/>
+      <img src="escudos/logo_0.png" alt="CDP" style="width:100%;height:100%;object-fit:contain;padding:1px;"/>
     </div>
     <div class="header-info">
       <div class="header-title">Club de Profesionales</div>
       <div class="header-subtitle">Justo José de Urquiza</div>
     </div>
     <div class="status-dot" id="statusDot" title="Conectado al Sheet"></div>
+    <button class="header-hamburger" id="headerHamburger" onclick="toggleNavDropdown()">
+      <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
   </div>
 </header>
 
@@ -2099,32 +2098,29 @@
     <button class="nav-btn nav-secondary" onclick="showSection('admin')" id="nav-admin" style="margin-left:auto">
       <span class="nav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span> Admin
     </button>
-    <!-- Botón Más (solo mobile) -->
-    <button class="nav-more-btn" id="navMoreBtn" onclick="toggleNavDropdown()">
-      Más <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
-    </button>
-    <!-- Dropdown -->
-    <div class="nav-dropdown" id="navDropdown">
-      <button class="nav-dropdown-item" onclick="showSectionFromDropdown('sponsors')">
-        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-        Sponsors
-      </button>
-      <button class="nav-dropdown-item" onclick="showSectionFromDropdown('reglamentos')">
-        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-        Reglamentos
-      </button>
-      <button class="nav-dropdown-item" onclick="showSectionFromDropdown('clima')">
-        <svg viewBox="0 0 24 24"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
-        Clima
-      </button>
-      <div class="nav-dropdown-divider"></div>
-      <button class="nav-dropdown-item" onclick="showSectionFromDropdown('admin')">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-        Admin
-      </button>
-    </div>
   </div>
 </nav>
+
+<!-- Dropdown hamburguesa (fuera del nav) -->
+<div class="nav-dropdown" id="navDropdown">
+  <button class="nav-dropdown-item" onclick="showSectionFromDropdown('sponsors')">
+    <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+    Sponsors
+  </button>
+  <button class="nav-dropdown-item" onclick="showSectionFromDropdown('reglamentos')">
+    <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+    Reglamentos
+  </button>
+  <button class="nav-dropdown-item" onclick="showSectionFromDropdown('clima')">
+    <svg viewBox="0 0 24 24"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
+    Clima
+  </button>
+  <div class="nav-dropdown-divider"></div>
+  <button class="nav-dropdown-item" onclick="showSectionFromDropdown('admin')">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    Admin
+  </button>
+</div>
 
 <main class="main">
 
@@ -2943,41 +2939,40 @@ function formatCanchaHora(ch) {
   return parts.join(' · ');
 }
 
-// ── Menú Más (dropdown mobile) ─────────────────────────────
+// ── Menú hamburguesa (dropdown mobile) ─────────────────────────────
 function toggleNavDropdown() {
-  var btn = document.getElementById('navMoreBtn');
   var dropdown = document.getElementById('navDropdown');
+  var hamburger = document.getElementById('headerHamburger');
   var isOpen = dropdown.classList.contains('show');
   
   if (isOpen) {
     dropdown.classList.remove('show');
-    btn.classList.remove('open');
   } else {
     dropdown.classList.add('show');
-    btn.classList.add('open');
   }
 }
 
 function showSectionFromDropdown(id) {
   // Cerrar dropdown
   document.getElementById('navDropdown').classList.remove('show');
-  document.getElementById('navMoreBtn').classList.remove('open');
   // Mostrar sección
   showSection(id);
   // Marcar item activo en dropdown
   document.querySelectorAll('.nav-dropdown-item').forEach(function(item) {
     item.classList.remove('active');
   });
-  event.target.closest('.nav-dropdown-item').classList.add('active');
+  if (event && event.target) {
+    var btn = event.target.closest('.nav-dropdown-item');
+    if (btn) btn.classList.add('active');
+  }
 }
 
 // Cerrar dropdown al hacer clic afuera
 document.addEventListener('click', function(e) {
   var dropdown = document.getElementById('navDropdown');
-  var moreBtn = document.getElementById('navMoreBtn');
-  if (dropdown && moreBtn && !dropdown.contains(e.target) && !moreBtn.contains(e.target)) {
+  var hamburger = document.getElementById('headerHamburger');
+  if (dropdown && hamburger && !dropdown.contains(e.target) && !hamburger.contains(e.target)) {
     dropdown.classList.remove('show');
-    moreBtn.classList.remove('open');
   }
 });
 
