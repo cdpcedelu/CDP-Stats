@@ -1146,7 +1146,7 @@
   .card-icon.red-card { background: var(--red); color: #fff; }
 
   .disc-sidebar {
-    background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+    background: linear-gradient(135deg, #374151 0%, #6b7280 100%);
     color: #fff;
     padding: 10px 14px;
     display: flex;
@@ -1155,8 +1155,14 @@
     align-items: center;
     min-width: 70px;
   }
-  .disc-sidebar.yellow {
-    background: linear-gradient(135deg, #b45309 0%, #f59e0b 100%);
+  [data-theme="dark"] .disc-sidebar {
+    background: linear-gradient(135deg, #334155 0%, #475569 100%);
+  }
+  [data-theme="green"] .disc-sidebar {
+    background: linear-gradient(135deg, #166534 0%, #22c55e 100%);
+  }
+  [data-theme="blue"] .disc-sidebar {
+    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
   }
 
   .suspension-info {
@@ -4402,7 +4408,7 @@ function renderDisc(view) {
             </div>
           </div>
         </div>
-        <div class="disc-sidebar yellow">
+        <div class="disc-sidebar">
           <div class="suspension-num">${total}</div>
           <div class="suspension-label">tarjetas</div>
         </div>
