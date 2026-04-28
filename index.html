@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- CDP Fixture — index.html — 2026-04-28 14:10 ARG — SUPABASE -->
+<!-- CDP Fixture — index.html — 2026-04-28 16:50 ARG — SUPABASE -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -1911,13 +1911,38 @@
   /* ADMIN PANEL STYLES                 */
   /* ═══════════════════════════════════ */
   .admin-login-box {
-    max-width: 360px;
+    max-width: 340px;
     margin: 60px auto;
     background: var(--bg2);
     border: 1px solid var(--border2);
-    border-radius: 20px;
-    padding: 32px 28px;
+    border-radius: 16px;
+    padding: 28px 24px;
     box-shadow: var(--shadow);
+  }
+  .admin-login-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 1.5rem;
+  }
+  .admin-login-icon {
+    width: 44px;
+    height: 44px;
+    background: var(--bg3);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+  }
+  .admin-login-title {
+    font-weight: 600;
+    font-size: 17px;
+    color: var(--text);
+  }
+  .admin-login-subtitle {
+    font-size: 12px;
+    color: var(--text-dimmer);
   }
 
   .admin-input {
@@ -1966,6 +1991,74 @@
   .admin-btn.small { padding: 7px 14px; font-size: 12px; border-radius: 8px; }
   .admin-btn.yellow { background: #fbbf24; border-color: #f59e0b; color: #000; }
   .admin-btn.red { background: var(--red); border-color: var(--red); color: #fff; }
+
+  /* Admin Panel V2 */
+  .admin-panel-header {
+    margin-bottom: 1.25rem;
+  }
+  .admin-panel-title {
+    font-family: Impact, 'Arial Black', sans-serif;
+    font-size: 28px;
+    color: var(--text);
+    letter-spacing: 1px;
+  }
+  .admin-panel-meta {
+    font-size: 13px;
+    color: var(--text-dimmer);
+    margin-top: 4px;
+  }
+  .admin-panel-meta a {
+    color: #dc2626;
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .admin-tabs-v2 {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+  .admin-tab-v2 {
+    padding: 10px 18px;
+    border-radius: 20px;
+    border: 1px solid var(--border2);
+    background: var(--bg2);
+    color: var(--text-dim);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .admin-tab-v2:hover {
+    border-color: var(--green);
+    color: var(--text);
+  }
+  .admin-tab-v2.active {
+    background: var(--green);
+    border-color: var(--green);
+    color: #fff;
+  }
+  .admin-content-box {
+    background: var(--bg2);
+    border-radius: 14px;
+    border: 1px solid var(--border2);
+    padding: 1rem;
+  }
+  .admin-content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  .admin-content-title {
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--text);
+  }
 
   .admin-select {
     width: 100%;
@@ -2975,12 +3068,15 @@
     <!-- LOGIN SCREEN -->
     <div id="adminLogin">
       <div class="admin-login-box">
-        <div style="text-align:center;margin-bottom:20px">
-          <div style="font-size:48px;margin-bottom:10px">🔐</div>
-          <div class="section-title" style="font-size:26px">Panel Administrador</div>
-          <div style="color:var(--text-dimmer);font-size:14px;margin-top:4px">Ingresá tu contraseña para acceder</div>
+        <div class="admin-login-header">
+          <div class="admin-login-icon">🔒</div>
+          <div>
+            <div class="admin-login-title">Panel Admin</div>
+            <div class="admin-login-subtitle">CDP Stats</div>
+          </div>
         </div>
-        <input type="password" id="adminPinInput" class="admin-input" placeholder="Contraseña de administrador"
+        <div style="font-size:13px;color:var(--text-dimmer);margin-bottom:6px">Contraseña</div>
+        <input type="password" id="adminPinInput" class="admin-input" placeholder="••••••••"
           onkeydown="if(event.key==='Enter') adminDoLogin()" autocomplete="off" maxlength="64">
         <div id="adminLoginError" style="color:var(--red);font-size:13px;text-align:center;margin:8px 0;display:none"></div>
         <button class="admin-btn primary full" onclick="adminDoLogin()" id="adminLoginBtn">
@@ -2991,50 +3087,47 @@
 
     <!-- ADMIN DASHBOARD (hidden until login) -->
     <div id="adminDashboard" style="display:none">
-      <div class="section-header">
-        <div>
-          <div class="section-title">Panel de Administración</div>
-          <div style="color:var(--text-dimmer);font-size:13px;margin-top:2px">
-            Bienvenido, <span id="adminUserName">Admin</span>
-            · <a href="javascript:void(0)" onclick="adminLogout()" style="color:var(--red);text-decoration:none;font-weight:600">Cerrar sesión</a>
-          </div>
+      <div class="admin-panel-header">
+        <div class="admin-panel-title">ADMINISTRACIÓN</div>
+        <div class="admin-panel-meta">
+          Bienvenido, <span id="adminUserName">Admin</span>
+          · <a href="javascript:void(0)" onclick="adminLogout()">Cerrar sesión</a>
         </div>
       </div>
 
       <!-- Admin Section Tabs -->
-      <div class="tab-row" style="margin-bottom:16px">
-        <button class="tab-pill active" onclick="showAdminSection('partidos', this)">⚽ Partidos</button>
-        <button class="tab-pill" onclick="showAdminSection('sponsors', this)">⭐ Sponsors</button>
-        <button class="tab-pill" onclick="showAdminSection('reglamentos', this)">📋 Reglamentos</button>
+      <div class="admin-tabs-v2">
+        <button class="admin-tab-v2 active" onclick="showAdminSection('partidos', this)">⚽ Partidos</button>
+        <button class="admin-tab-v2" onclick="showAdminSection('sponsors', this)">⭐ Sponsors</button>
+        <button class="admin-tab-v2" onclick="showAdminSection('reglamentos', this)">📋 Reglamentos</button>
       </div>
 
       <!-- SECCIÓN PARTIDOS -->
-      <div id="adminSeccionPartidos">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-          <div class="tab-row" id="adminFechaTabs"></div>
-          <button class="btn-primary" onclick="openNuevoPartidoModal()" style="font-size:13px;padding:8px 16px">+ Nuevo Partido</button>
+      <div id="adminSeccionPartidos" class="admin-content-box">
+        <div class="admin-content-header">
+          <div class="admin-content-title">Gestión de Partidos</div>
+          <button class="admin-btn primary small" onclick="openNuevoPartidoModal()">+ Nuevo</button>
         </div>
-
-        <!-- Match list -->
+        <div class="tab-row" id="adminFechaTabs" style="margin-bottom:12px"></div>
         <div id="adminMatchList">
           <div class="loading"><div class="loading-spinner"></div><div class="loading-text">Cargando partidos...</div></div>
         </div>
       </div>
 
       <!-- SECCIÓN SPONSORS -->
-      <div id="adminSeccionSponsors" style="display:none">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-          <div class="section-subtitle">Gestión de Sponsors</div>
-          <button class="btn-primary" onclick="openSponsorModal()" style="font-size:13px;padding:8px 16px">+ Nuevo Sponsor</button>
+      <div id="adminSeccionSponsors" class="admin-content-box" style="display:none">
+        <div class="admin-content-header">
+          <div class="admin-content-title">Gestión de Sponsors</div>
+          <button class="admin-btn primary small" onclick="openSponsorModal()">+ Nuevo</button>
         </div>
         <div id="adminSponsorsList"></div>
       </div>
 
       <!-- SECCIÓN REGLAMENTOS -->
-      <div id="adminSeccionReglamentos" style="display:none">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-          <div class="section-subtitle">Gestión de Reglamentos</div>
-          <button class="btn-primary" onclick="openReglamentoModal()" style="font-size:13px;padding:8px 16px">+ Nuevo Reglamento</button>
+      <div id="adminSeccionReglamentos" class="admin-content-box" style="display:none">
+        <div class="admin-content-header">
+          <div class="admin-content-title">Gestión de Reglamentos</div>
+          <button class="admin-btn primary small" onclick="openReglamentoModal()">+ Nuevo</button>
         </div>
         <div id="adminReglamentosList"></div>
       </div>
@@ -3105,7 +3198,7 @@
 
       <!-- Modal Sponsor -->
       <div id="sponsorModal" class="modal-overlay" style="display:none">
-        <div class="modal-content" style="max-width:450px">
+        <div class="modal-content" style="max-width:500px">
           <div class="modal-header">
             <span class="modal-title" id="sponsorModalTitle">➕ Nuevo Sponsor</span>
             <button class="modal-close" onclick="closeSponsorModal()">×</button>
@@ -3117,11 +3210,25 @@
               <input type="text" id="spNombre" class="admin-select" placeholder="Nombre del sponsor">
             </div>
             <div class="form-group">
-              <label class="form-label">URL del Logo</label>
+              <label class="form-label">Descripción</label>
+              <textarea id="spDescripcion" class="admin-select" rows="3" placeholder="Descripción del sponsor..." style="resize:vertical"></textarea>
+            </div>
+            <div class="form-row">
+              <div class="form-group" style="flex:1">
+                <label class="form-label">Dirección</label>
+                <input type="text" id="spDireccion" class="admin-select" placeholder="Ciudad, Provincia">
+              </div>
+              <div class="form-group" style="flex:1">
+                <label class="form-label">Teléfono</label>
+                <input type="text" id="spTelefono" class="admin-select" placeholder="3442-123456">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">URL del Logo (opcional)</label>
               <input type="text" id="spLogo" class="admin-select" placeholder="https://...">
             </div>
             <div class="form-group">
-              <label class="form-label">Link (opcional)</label>
+              <label class="form-label">Link web (opcional)</label>
               <input type="text" id="spLink" class="admin-select" placeholder="https://...">
             </div>
             <div class="form-row">
@@ -5306,7 +5413,7 @@ function showAdminSection(section, btn) {
   document.getElementById('adminSeccionReglamentos').style.display = 'none';
   
   // Desactivar todos los tabs
-  btn.parentElement.querySelectorAll('.tab-pill').forEach(function(b) { b.classList.remove('active'); });
+  btn.parentElement.querySelectorAll('.admin-tab-v2').forEach(function(b) { b.classList.remove('active'); });
   btn.classList.add('active');
   
   // Mostrar sección seleccionada
@@ -5377,6 +5484,9 @@ function openSponsorModal(id) {
   document.getElementById('sponsorModal').style.display = 'flex';
   document.getElementById('spId').value = '';
   document.getElementById('spNombre').value = '';
+  document.getElementById('spDescripcion').value = '';
+  document.getElementById('spDireccion').value = '';
+  document.getElementById('spTelefono').value = '';
   document.getElementById('spLogo').value = '';
   document.getElementById('spLink').value = '';
   document.getElementById('spOrden').value = '1';
@@ -5396,6 +5506,9 @@ function editSponsor(id) {
   document.getElementById('sponsorModal').style.display = 'flex';
   document.getElementById('spId').value = sp.id || sp.ID || '';
   document.getElementById('spNombre').value = sp.nombre || '';
+  document.getElementById('spDescripcion').value = sp.descripcion || sp.informacion || '';
+  document.getElementById('spDireccion').value = sp.direccion || '';
+  document.getElementById('spTelefono').value = sp.telefono || '';
   document.getElementById('spLogo').value = sp.logo_url || '';
   document.getElementById('spLink').value = sp.link_url || '';
   document.getElementById('spOrden').value = sp.orden || 1;
@@ -5410,6 +5523,9 @@ function closeSponsorModal() {
 async function guardarSponsor() {
   var id = document.getElementById('spId').value;
   var nombre = document.getElementById('spNombre').value.trim();
+  var descripcion = document.getElementById('spDescripcion').value.trim();
+  var direccion = document.getElementById('spDireccion').value.trim();
+  var telefono = document.getElementById('spTelefono').value.trim();
   var logo_url = document.getElementById('spLogo').value.trim();
   var link_url = document.getElementById('spLink').value.trim();
   var orden = parseInt(document.getElementById('spOrden').value) || 1;
@@ -5430,6 +5546,9 @@ async function guardarSponsor() {
         token: adminState.token,
         id: id ? parseInt(id) : undefined,
         nombre: nombre,
+        descripcion: descripcion,
+        direccion: direccion,
+        telefono: telefono,
         logo_url: logo_url,
         link_url: link_url,
         orden: orden,
