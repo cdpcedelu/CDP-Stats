@@ -233,8 +233,8 @@
   }
 
   .logo-mark {
-    width: 64px;
-    height: 64px;
+    width: 70px;
+    height: 70px;
     border-radius: 8px;
     display: flex;
     align-items: center;
@@ -995,21 +995,30 @@
   /* GOLEADORES */
   .scorer-row {
     display: flex;
-    align-items: center;
-    padding: 12px 18px;
-    border-bottom: 1px solid var(--bg3);
-    gap: 14px;
-    transition: background 0.15s;
+    align-items: stretch;
+    border: 1px solid var(--border2);
+    border-radius: 12px;
+    margin-bottom: 8px;
+    overflow: hidden;
+    background: var(--bg2);
+    transition: all 0.15s;
   }
 
-  .scorer-row:hover { background: var(--bg3); }
-  .scorer-row:last-child { border-bottom: none; }
+  .scorer-row:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
+
+  .scorer-content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding: 10px 14px;
+    gap: 12px;
+  }
 
   .scorer-rank {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 22px;
+    font-family: Impact, 'Arial Black', sans-serif;
+    font-size: 24px;
     color: var(--text-dimmer);
-    width: 30px;
+    width: 28px;
     text-align: center;
     flex-shrink: 0;
   }
@@ -1022,9 +1031,10 @@
 
   .scorer-name {
     font-family: 'Barlow Condensed', sans-serif;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 700;
     color: var(--text);
+    text-transform: uppercase;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -1033,24 +1043,46 @@
   .scorer-team {
     font-size: 12px;
     color: var(--text-dimmer);
-    margin-top: 1px;
+    margin-top: 2px;
     font-weight: 500;
   }
 
+  .scorer-sidebar {
+    background: linear-gradient(135deg, #374151 0%, #6b7280 100%);
+    color: #fff;
+    padding: 10px 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-width: 70px;
+  }
+  [data-theme="dark"] .scorer-sidebar {
+    background: linear-gradient(135deg, #334155 0%, #475569 100%);
+  }
+  [data-theme="green"] .scorer-sidebar {
+    background: linear-gradient(135deg, #166534 0%, #22c55e 100%);
+  }
+  [data-theme="blue"] .scorer-sidebar {
+    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+  }
+
   .scorer-goals {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 32px;
-    color: var(--green);
+    font-family: Impact, 'Arial Black', sans-serif;
+    font-size: 26px;
+    color: #fff;
     line-height: 1;
   }
 
   .goals-label {
-    font-size: 10px;
-    color: var(--text-dimmer);
-    text-align: right;
+    font-size: 9px;
+    color: #fff;
+    text-align: center;
     letter-spacing: 1px;
     text-transform: uppercase;
-    font-weight: 600;
+    font-weight: 700;
+    opacity: 0.9;
+    margin-top: 2px;
   }
 
   /* DISCIPLINA */
@@ -4022,15 +4054,17 @@ function renderScorers(view, showAll) {
     var rankClass = rank === 1 ? 'gold' : rank === 2 ? 'silver' : rank === 3 ? 'bronze' : '';
     var goals = p['Total'] || 0;
     html += '<div class="scorer-row">' +
-      '<div class="scorer-rank ' + rankClass + '">' + rank + '</div>' +
-      '<div class="scorer-info">' +
-        '<div class="scorer-name">' + (p['Jugador'] || '-') + '</div>' +
-        '<div class="scorer-team" style="display:flex;align-items:center;gap:5px">' +
-          getEscudo(p['Equipo'] || '', 18) +
-          '<span>' + (p['Equipo'] || '-') + '</span>' +
+      '<div class="scorer-content">' +
+        '<div class="scorer-rank ' + rankClass + '">' + rank + '</div>' +
+        '<div class="scorer-info">' +
+          '<div class="scorer-name">' + (p['Jugador'] || '-') + '</div>' +
+          '<div class="scorer-team" style="display:flex;align-items:center;gap:5px">' +
+            getEscudo(p['Equipo'] || '', 18) +
+            '<span>' + (p['Equipo'] || '-') + '</span>' +
+          '</div>' +
         '</div>' +
       '</div>' +
-      '<div>' +
+      '<div class="scorer-sidebar">' +
         '<div class="scorer-goals">' + goals + '</div>' +
         '<div class="goals-label">goles</div>' +
       '</div>' +
