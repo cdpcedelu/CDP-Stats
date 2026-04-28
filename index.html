@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- CDP Fixture — index.html — 2026-04-28 11:00 ARG — SUPABASE -->
+<!-- CDP Fixture — index.html — 2026-04-28 11:20 ARG — SUPABASE -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -903,22 +903,6 @@
   @media (max-width: 640px) {
     .fix-selects-v3 { flex-direction: column; }
   }
-  .fix-select-card {
-    flex: 1;
-    background: var(--bg2);
-    border-radius: 12px;
-    border: 1px solid var(--border2);
-    padding: 12px 16px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-  .fix-select-card:hover {
-    border-color: var(--green);
-    box-shadow: var(--shadow);
-  }
   .fix-select-icon {
     width: 38px;
     height: 38px;
@@ -953,9 +937,8 @@
     text-overflow: ellipsis;
   }
   .fix-select-dropdown {
-    flex: 1;
-    min-width: 0;
-    padding: 0;
+    width: 100%;
+    padding: 4px 0;
     border: none;
     background: transparent;
     font-family: 'Barlow Condensed', sans-serif;
@@ -964,12 +947,78 @@
     color: var(--text);
     cursor: pointer;
     outline: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
     appearance: none;
+  }
+  .fix-select-card {
+    flex: 1;
+    background: var(--bg2);
+    border-radius: 12px;
+    border: 1px solid var(--border2);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+    position: relative;
+  }
+  .fix-select-card:hover {
+    border-color: var(--green);
+    box-shadow: var(--shadow);
+  }
+  .fix-select-card label {
+    display: contents;
+    cursor: pointer;
   }
   .fix-select-arrow {
     color: var(--text-dimmer);
     font-size: 12px;
     flex-shrink: 0;
+  }
+
+  /* ═══ POSICIONES HEADER V2 ═══ */
+  .pos-header-v2 {
+    margin-bottom: 16px;
+  }
+  .pos-title-v2 {
+    font-family: Impact, 'Arial Black', sans-serif;
+    font-size: 28px;
+    color: var(--text);
+    letter-spacing: 1px;
+    margin-bottom: 14px;
+  }
+  .pos-segment-v2 {
+    display: inline-flex;
+    background: var(--bg3);
+    border-radius: 12px;
+    padding: 4px;
+    gap: 2px;
+  }
+  .pos-seg-btn {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 10px 24px;
+    border-radius: 10px;
+    border: none;
+    background: transparent;
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .pos-seg-btn.active {
+    background: var(--bg2);
+    color: var(--text);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  [data-theme="dark"] .pos-seg-btn.active {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+  .pos-seg-btn:hover:not(.active) {
+    color: var(--text);
   }
 
   /* TABLA POSICIONES */
@@ -2551,7 +2600,7 @@
     </div>
     <!-- Selectores como cards -->
     <div class="fix-selects-v3">
-      <div class="fix-select-card">
+      <label class="fix-select-card">
         <div class="fix-select-icon">🛡️</div>
         <div class="fix-select-info">
           <div class="fix-select-label">Filtrar por equipo</div>
@@ -2595,8 +2644,8 @@
           </select>
         </div>
         <span class="fix-select-arrow">▼</span>
-      </div>
-      <div class="fix-select-card" id="fechaSelectCard">
+      </label>
+      <label class="fix-select-card">
         <div class="fix-select-icon green">📅</div>
         <div class="fix-select-info">
           <div class="fix-select-label">Seleccionar fecha</div>
@@ -2605,7 +2654,7 @@
           </select>
         </div>
         <span class="fix-select-arrow">▼</span>
-      </div>
+      </label>
     </div>
     <div id="fixtureContainer">
       <div class="loading"><div class="loading-spinner"></div><div class="loading-text">Cargando fixture...</div></div>
@@ -2614,13 +2663,13 @@
 
   <!-- ===================== POSICIONES ===================== -->
   <section class="section" id="section-posiciones">
-    <div class="section-header">
-      <div class="section-title">Posiciones</div>
-    </div>
-    <div class="tab-row" id="posTab">
-      <button class="tab-pill active" onclick="showPos('zona-a-libres', this)">Zona A</button>
-      <button class="tab-pill" onclick="showPos('zona-b-libres', this)">Zona B</button>
-      <button class="tab-pill" onclick="showPos('general-senior', this)">Sénior</button>
+    <div class="pos-header-v2">
+      <div class="pos-title-v2">POSICIONES</div>
+      <div class="pos-segment-v2" id="posTab">
+        <button class="pos-seg-btn active" onclick="showPos('zona-a-libres', this)">Zona A</button>
+        <button class="pos-seg-btn" onclick="showPos('zona-b-libres', this)">Zona B</button>
+        <button class="pos-seg-btn" onclick="showPos('general-senior', this)">Sénior</button>
+      </div>
     </div>
     <div id="posContainer">
       <div class="loading"><div class="loading-spinner"></div><div class="loading-text">Cargando posiciones...</div></div>
@@ -2629,13 +2678,13 @@
 
   <!-- ===================== GOLEADORES ===================== -->
   <section class="section" id="section-goleadores">
-    <div class="section-header">
-      <div class="section-title">Goleadores</div>
-    </div>
-    <div class="tab-row">
-      <button class="tab-pill active" onclick="showScorers('libres-a', this)">Libres A</button>
-      <button class="tab-pill" onclick="showScorers('libres-b', this)">Libres B</button>
-      <button class="tab-pill" onclick="showScorers('senior', this)">Sénior</button>
+    <div class="pos-header-v2">
+      <div class="pos-title-v2">GOLEADORES</div>
+      <div class="pos-segment-v2" id="scorersTab">
+        <button class="pos-seg-btn active" onclick="showScorers('libres-a', this)">Libres A</button>
+        <button class="pos-seg-btn" onclick="showScorers('libres-b', this)">Libres B</button>
+        <button class="pos-seg-btn" onclick="showScorers('senior', this)">Sénior</button>
+      </div>
     </div>
     <div class="search-wrap" id="scorerSearchWrap" style="display:none">
       <span class="search-icon">🔍</span>
@@ -2649,14 +2698,14 @@
 
   <!-- ===================== DISCIPLINA ===================== -->
   <section class="section" id="section-disciplina">
-    <div class="section-header">
-      <div class="section-title">Disciplina</div>
-    </div>
-    <div class="tab-row">
-      <button class="tab-pill active" onclick="showDisc('rojas', this)">🟥 Rojas</button>
-      <button class="tab-pill" onclick="showDisc('amarillas-a', this)">🟨 Libres A</button>
-      <button class="tab-pill" onclick="showDisc('amarillas-b', this)">🟨 Libres B</button>
-      <button class="tab-pill" onclick="showDisc('amarillas-senior', this)">🟨 Sénior</button>
+    <div class="pos-header-v2">
+      <div class="pos-title-v2">DISCIPLINA</div>
+      <div class="pos-segment-v2" id="discTab">
+        <button class="pos-seg-btn active" onclick="showDisc('rojas', this)">🟥 Rojas</button>
+        <button class="pos-seg-btn" onclick="showDisc('amarillas-a', this)">🟨 Libres A</button>
+        <button class="pos-seg-btn" onclick="showDisc('amarillas-b', this)">🟨 Libres B</button>
+        <button class="pos-seg-btn" onclick="showDisc('amarillas-senior', this)">🟨 Sénior</button>
+      </div>
     </div>
     <div id="discContainer">
       <div class="loading"><div class="loading-spinner"></div><div class="loading-text">Cargando disciplina...</div></div>
@@ -3504,8 +3553,8 @@ function syncPosicionesToCategoria() {
   if (state.currentPos !== targetView) {
     state.currentPos = targetView;
     // Actualizar botón activo
-    document.querySelectorAll('#posTab .tab-pill').forEach(b => b.classList.remove('active'));
-    const btn = document.querySelector(`#posTab .tab-pill[onclick*="'${targetView}'"]`);
+    document.querySelectorAll('#posTab .pos-seg-btn').forEach(b => b.classList.remove('active'));
+    const btn = document.querySelector(`#posTab .pos-seg-btn[onclick*="'${targetView}'"]`);
     if (btn) btn.classList.add('active');
     if (state.posiciones[targetView]) {
       renderPos(targetView);
@@ -3900,7 +3949,7 @@ async function loadPosiciones() {
 }
 
 async function showPos(view, btn) {
-  document.querySelectorAll('#posTab .tab-pill').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('#posTab .pos-seg-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   state.currentPos = view;
   // Sincronizar categoría global
@@ -4350,7 +4399,7 @@ async function loadGoleadores() {
 }
 
 async function showScorers(view, btn) {
-  document.querySelectorAll('#section-goleadores .tab-pill').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('#scorersTab .pos-seg-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   state.currentScorers = view;
   // Sincronizar categoría global
@@ -4464,7 +4513,7 @@ async function loadDisciplina() {
 }
 
 async function showDisc(view, btn) {
-  document.querySelectorAll('#section-disciplina .tab-pill').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('#discTab .pos-seg-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   state.currentDisc = view;
   // Sincronizar categoría global (solo para amarillas, rojas son mixtas)
@@ -6167,7 +6216,7 @@ async function saveRoja() {
       if (json.ok) {
         state.disciplina = {};
         closeRojaModal();
-        showDisc('rojas', document.querySelector('#section-disciplina .tab-pill.active'));
+        showDisc('rojas', document.querySelector('#discTab .pos-seg-btn.active'));
       } else {
         errDiv.textContent = json.error || 'Error al agregar';
         errDiv.style.display = 'block';
