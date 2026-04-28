@@ -1088,15 +1088,24 @@
   /* DISCIPLINA */
   .disc-row {
     display: flex;
-    align-items: center;
-    padding: 12px 18px;
-    border-bottom: 1px solid var(--bg3);
-    gap: 12px;
-    transition: background 0.15s;
+    align-items: stretch;
+    border: 1px solid var(--border2);
+    border-radius: 12px;
+    margin-bottom: 8px;
+    overflow: hidden;
+    background: var(--bg2);
+    transition: all 0.15s;
   }
 
-  .disc-row:hover { background: var(--bg3); }
-  .disc-row:last-child { border-bottom: none; }
+  .disc-row:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
+
+  .disc-content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding: 10px 14px;
+    gap: 12px;
+  }
 
   .disc-info { flex: 1; min-width: 0; }
 
@@ -1105,10 +1114,11 @@
     font-size: 15px;
     font-weight: 700;
     color: var(--text);
+    text-transform: uppercase;
   }
 
   .disc-team {
-    font-size: 11px;
+    font-size: 12px;
     color: var(--text-dimmer);
     margin-top: 2px;
     font-weight: 500;
@@ -1135,30 +1145,48 @@
   .card-icon.yellow-card { background: #fbbf24; color: #000; }
   .card-icon.red-card { background: var(--red); color: #fff; }
 
+  .disc-sidebar {
+    background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+    color: #fff;
+    padding: 10px 14px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-width: 70px;
+  }
+  .disc-sidebar.yellow {
+    background: linear-gradient(135deg, #b45309 0%, #f59e0b 100%);
+  }
+
   .suspension-info {
-    text-align: right;
+    text-align: center;
     flex-shrink: 0;
   }
 
   .suspension-num {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 22px;
-    color: var(--red);
+    font-family: Impact, 'Arial Black', sans-serif;
+    font-size: 26px;
+    color: #fff;
     line-height: 1;
   }
 
   .suspension-label {
-    font-size: 10px;
-    color: var(--text-dimmer);
-    letter-spacing: 0.5px;
-    font-weight: 600;
+    font-size: 9px;
+    color: #fff;
+    letter-spacing: 1px;
+    font-weight: 700;
+    text-transform: uppercase;
+    opacity: 0.9;
+    margin-top: 2px;
   }
 
   .habilitado-fecha {
-    font-size: 11px;
-    color: var(--green);
-    margin-top: 2px;
-    font-weight: 600;
+    font-size: 10px;
+    color: #fff;
+    margin-top: 3px;
+    font-weight: 700;
+    opacity: 0.9;
   }
 
   /* SPONSORS */
@@ -4308,20 +4336,22 @@ function renderDisc(view) {
       const rowClick = isAdmin ? `onclick="openRojaModal(decodeURIComponent('${rojaData}'))" style="cursor:pointer;${sinSancion ? 'border-left:3px solid #ef4444;padding-left:8px' : ''}"` : `style="${sinSancion ? 'border-left:3px solid #ef4444;padding-left:8px' : ''}"`;
 
       return `<div class="disc-row" ${rowClick}>
-        <div class="disc-info" style="flex:1">
-          <div class="disc-name">${r['Jugador'] || '-'}</div>
-          <div class="disc-team" style="display:flex;align-items:center;gap:5px">
-            ${getEscudo(r['Equipo'] || '', 16)}
-            <span>${r['Equipo'] || '-'}${articulo ? ' · Art. ' + articulo : ''}</span>
+        <div class="disc-content">
+          <div class="disc-info">
+            <div class="disc-name">${r['Jugador'] || '-'}</div>
+            <div class="disc-team" style="display:flex;align-items:center;gap:5px">
+              ${getEscudo(r['Equipo'] || '', 16)}
+              <span>${r['Equipo'] || '-'}${articulo ? ' · Art. ' + articulo : ''}</span>
+            </div>
+            ${sinSancion ? '<div style="font-size:10px;color:#ef4444;margin-top:3px;font-weight:600">⚠ Sin sanción cargada</div>' : ''}
           </div>
-          ${sinSancion ? '<div style="font-size:10px;color:#ef4444;margin-top:3px;font-weight:600">⚠ Sin sanción cargada</div>' : ''}
+          ${isAdmin ? '<div style="color:var(--green);font-size:16px;flex-shrink:0">✏️</div>' : ''}
         </div>
-        <div class="suspension-info">
-          <div class="suspension-num" style="font-size:${esNumero ? '2rem' : '1rem'};line-height:1.2">${partidosDisplay}</div>
+        <div class="disc-sidebar">
+          <div class="suspension-num" style="font-size:${esNumero ? '26px' : '14px'}">${partidosDisplay}</div>
           ${labelPartidos ? `<div class="suspension-label">${labelPartidos}</div>` : ''}
           ${fechaHabStr ? `<div class="habilitado-fecha">Hab. ${fechaHabStr}</div>` : ''}
         </div>
-        ${isAdmin ? '<div style="color:var(--green);font-size:16px;margin-left:6px;flex-shrink:0">✏️</div>' : ''}
       </div>`;
     }
 
@@ -4360,18 +4390,22 @@ function renderDisc(view) {
 
     sorted.forEach(r => {
       const total = r['Total'] || 0;
-      const cards = Array.from({length: Math.min(total, 10)}, () =>
+      const cards = Array.from({length: Math.min(total, 5)}, () =>
         `<span class="card-icon yellow-card">A</span>`).join('');
       html += `<div class="disc-row">
-        <div class="disc-info">
-          <div class="disc-name">${r['Jugador'] || '-'}</div>
-          <div class="disc-team" style="display:flex;align-items:center;gap:5px">
-            ${getEscudo(r['Equipo'] || '', 16)}
-            <span>${r['Equipo'] || '-'}</span>
+        <div class="disc-content">
+          <div class="disc-info">
+            <div class="disc-name">${r['Jugador'] || '-'}</div>
+            <div class="disc-team" style="display:flex;align-items:center;gap:5px">
+              ${getEscudo(r['Equipo'] || '', 16)}
+              <span>${r['Equipo'] || '-'}</span>
+            </div>
           </div>
         </div>
-        <div class="disc-cards">${cards}</div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:#d97706;width:28px;text-align:right;font-weight:700">${total}</div>
+        <div class="disc-sidebar yellow">
+          <div class="suspension-num">${total}</div>
+          <div class="suspension-label">tarjetas</div>
+        </div>
       </div>`;
     });
 
