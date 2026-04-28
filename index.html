@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- CDP Fixture — index.html — 2026-04-28 11:20 ARG — SUPABASE -->
+<!-- CDP Fixture — index.html — 2026-04-28 11:30 ARG — SUPABASE -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -1932,14 +1932,40 @@
   }
 
   /* ─── CLIMA ─────────────────────────────────────── */
+  /* ═══ CLIMA HEADER V1 ═══ */
+  .clima-header-v1 {
+    padding: 0 16px;
+    margin-bottom: 16px;
+  }
+  .clima-title-v1 {
+    font-family: Impact, 'Arial Black', sans-serif;
+    font-size: 28px;
+    color: var(--text);
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+  .clima-subtitle-v1 {
+    font-family: 'Barlow', sans-serif;
+    font-size: 14px;
+    color: var(--text-dim);
+  }
   .clima-section-title {
     font-family: 'Barlow Condensed', sans-serif;
-    font-size: 16px;
+    font-size: 13px;
     font-weight: 700;
-    color: var(--text-dim);
     text-transform: uppercase;
     letter-spacing: 1px;
-    padding: 12px 16px 8px;
+    color: var(--text-dimmer);
+    margin: 16px 16px 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .clima-section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border2);
   }
 
   /* Opción 1: Cards con sidebar para días de partido */
@@ -2782,8 +2808,9 @@
 
   <!-- ================== CLIMA ================== -->
   <section class="section" id="section-clima">
-    <div class="section-header">
-      <div class="section-title">🌧️ Clima — Concepción del Uruguay</div>
+    <div class="clima-header-v1">
+      <div class="clima-title-v1">CLIMA</div>
+      <div class="clima-subtitle-v1">Concepción del Uruguay, Entre Ríos</div>
     </div>
 
     <div id="climaContainer">
@@ -6431,7 +6458,7 @@ document.getElementById('rojaModalOverlay').addEventListener('click', function(e
     }
 
     // ── OPCIÓN 1: Días de partido con sidebar ──
-    html += '<div class="clima-section-title">⚽ Días de partido — Viernes y Sábados</div>';
+    html += '<div class="clima-section-title">⚽ Sábado — día de partido</div>';
     html += '<div class="clima-partido-grid">';
 
     dates.forEach(function(d, i) {
@@ -6478,7 +6505,7 @@ document.getElementById('rojaModalOverlay').addEventListener('click', function(e
     html += '</div>';
 
     // ── OPCIÓN 3: Pronóstico extendido compacto ──
-    html += '<div class="clima-section-title" style="margin-top:8px">📅 Pronóstico completo — 10 días</div>';
+    html += '<div class="clima-section-title">📅 Pronóstico completo — 10 días</div>';
     html += '<div class="clima-extended-list">';
 
     dates.forEach(function(d, i) {
