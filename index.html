@@ -1016,7 +1016,7 @@
 
   .scorer-rank {
     font-family: Impact, 'Arial Black', sans-serif;
-    font-size: 24px;
+    font-size: 22px;
     color: var(--text-dimmer);
     width: 28px;
     text-align: center;
@@ -1031,13 +1031,13 @@
 
   .scorer-name {
     font-family: 'Barlow Condensed', sans-serif;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 700;
     color: var(--text);
     text-transform: uppercase;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    line-height: 1.2;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
 
   .scorer-team {
@@ -1055,7 +1055,8 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    min-width: 70px;
+    min-width: 75px;
+    width: 75px;
   }
   [data-theme="dark"] .scorer-sidebar {
     background: linear-gradient(135deg, #334155 0%, #475569 100%);
@@ -1069,7 +1070,7 @@
 
   .scorer-goals {
     font-family: Impact, 'Arial Black', sans-serif;
-    font-size: 26px;
+    font-size: 28px;
     color: #fff;
     line-height: 1;
   }
@@ -1111,10 +1112,13 @@
 
   .disc-name {
     font-family: 'Barlow Condensed', sans-serif;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 700;
     color: var(--text);
     text-transform: uppercase;
+    line-height: 1.2;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
 
   .disc-team {
@@ -1153,7 +1157,8 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    min-width: 70px;
+    min-width: 75px;
+    width: 75px;
   }
   [data-theme="dark"] .disc-sidebar {
     background: linear-gradient(135deg, #334155 0%, #475569 100%);
@@ -1172,7 +1177,7 @@
 
   .suspension-num {
     font-family: Impact, 'Arial Black', sans-serif;
-    font-size: 26px;
+    font-size: 28px;
     color: #fff;
     line-height: 1;
   }
@@ -4354,7 +4359,7 @@ function renderDisc(view) {
           ${isAdmin ? '<div style="color:var(--green);font-size:16px;flex-shrink:0">✏️</div>' : ''}
         </div>
         <div class="disc-sidebar">
-          <div class="suspension-num" style="font-size:${esNumero ? '26px' : '14px'}">${partidosDisplay}</div>
+          <div class="suspension-num">${partidosDisplay}</div>
           ${labelPartidos ? `<div class="suspension-label">${labelPartidos}</div>` : ''}
           ${fechaHabStr ? `<div class="habilitado-fecha">Hab. ${fechaHabStr}</div>` : ''}
         </div>
