@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- CDP Fixture — index.html — 2026-04-28 17:00 ARG — SUPABASE -->
+<!-- CDP Fixture — index.html — 2026-04-28 17:15 ARG — SUPABASE -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -1326,6 +1326,17 @@
     font-weight: 800;
     box-shadow: 0 2px 6px rgba(205,127,50,.4);
   }
+
+  /* Indicador de cambio de posición */
+  .pos-delta {
+    font-size: 9px;
+    font-weight: 700;
+    margin-left: 2px;
+    white-space: nowrap;
+  }
+  .pos-delta.up { color: #22c55e; }
+  .pos-delta.down { color: #ef4444; }
+  .pos-delta.same { color: #9ca3af; }
 
   .team-cell {
     display: flex;
@@ -2943,7 +2954,7 @@
         <div class="fix-select-info">
           <div class="fix-select-label">Filtrar por equipo</div>
           <select class="fix-select-dropdown" id="equipoSelect" onchange="filterByEquipo(this.value)">
-            <option value="">Todos los equipos</option>
+            <option value="">Todos</option>
             <optgroup label="── LIBRES ──">
               <option value="Abogados A">Abogados A</option>
               <option value="Abogados AR">Abogados AR</option>
@@ -3799,6 +3810,7 @@ async function fetchAPI(action, params) {
 let state = {
   fixture: null,
   posiciones: {},
+  prevPositions: {}, // Posiciones de la fecha anterior para mostrar cambios
   goleadores: {},
   disciplina: {},
   sponsors: null,
@@ -3809,6 +3821,15 @@ let state = {
   currentEquipo: '',
   currentCategoria: 'libres' // 'libres' | 'senior' - sincroniza entre secciones
 };
+
+// Obtener posición anterior de un equipo (calcula dinámicamente)
+function getPreviousPosition(equipo, view) {
+  // Calcular posiciones anteriores si no están cacheadas para esta vista
+  if (!state.prevPositions[view]) {
+    state.prevPositions[view] = calcularPosicionesAnteriores(view);
+  }
+  return state.prevPositions[view][equipo] || null;
+}
 
 // ============================================================
 // NAVIGATION
@@ -4120,7 +4141,7 @@ function filterByEquipo(equipo) {
       const sinLib = todos.filter(p => !String(p.partido || '').toLowerCase().includes('libre'));
       const jug = sinLib.filter(p => p.jugado === true || p.jugado === 'Jugado').length;
       const tot = sinLib.length;
-      const lbl = `Fecha ${k} (${jug}/${tot} jugados)`;
+      const lbl = `F${k} (${jug}/${tot})`;
       return `<option value="${k}" ${k === selKey ? 'selected' : ''}>${lbl}</option>`;
     }).join('');
     fechaSelect.innerHTML = opts;
@@ -4392,8 +4413,22 @@ function renderPos(view) {
       rachaHtml = '<button class="racha-btn" data-equipo="' + escapeHTML(equipo) + '" onclick="event.stopPropagation();showUltimosPartidos(this.dataset.equipo, this)">' + rachaHtml + '</button>';
     }
     
+    // Calcular cambio de posición (si hay datos previos)
+    var deltaHtml = '';
+    var prevPos = getPreviousPosition(equipo, view);
+    if (prevPos !== null && prevPos !== undefined) {
+      var delta = prevPos - pos; // positivo = subió, negativo = bajó
+      if (delta > 0) {
+        deltaHtml = '<span class="pos-delta up">▲' + delta + '</span>';
+      } else if (delta < 0) {
+        deltaHtml = '<span class="pos-delta down">▼' + Math.abs(delta) + '</span>';
+      } else {
+        deltaHtml = '<span class="pos-delta same">—</span>';
+      }
+    }
+    
     html += '<tr>' +
-      '<td><div class="pos-num ' + posClass + '">' + pos + '</div></td>' +
+      '<td><div class="pos-num ' + posClass + '">' + pos + '</div>' + deltaHtml + '</td>' +
       '<td>' +
         '<div class="team-cell">' +
           getEscudo(equipo, 28) +
