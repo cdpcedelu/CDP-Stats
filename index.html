@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- CDP Fixture — index.html — 2026-04-27 23:35 ARG — SUPABASE -->
+<!-- CDP Fixture — index.html — 2026-04-28 11:00 ARG — SUPABASE -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -807,6 +807,169 @@
     border-color: var(--green);
     color: white;
     box-shadow: 0 4px 12px rgba(22,163,74,0.25);
+  }
+
+  /* ═══ FIXTURE HEADER V3 ═══ */
+  .fix-header-v3 {
+    background: linear-gradient(135deg, #1f2937, #374151);
+    border-radius: 16px;
+    padding: 16px 18px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  [data-theme="dark"] .fix-header-v3 {
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+  }
+  [data-theme="green"] .fix-header-v3 {
+    background: linear-gradient(135deg, #14532d, #166534);
+  }
+  [data-theme="blue"] .fix-header-v3 {
+    background: linear-gradient(135deg, #1e3a8a, #1d4ed8);
+  }
+  .fix-header-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .fix-header-title {
+    font-family: Impact, 'Arial Black', sans-serif;
+    font-size: 24px;
+    color: #fff;
+    letter-spacing: 1px;
+  }
+  .fix-fecha-pill {
+    background: rgba(255,255,255,0.15);
+    border-radius: 20px;
+    padding: 6px 6px 6px 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .fix-fecha-text {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+  }
+  .fix-pendientes {
+    background: #fbbf24;
+    color: #000;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: 12px;
+  }
+  .fix-pendientes.completa {
+    background: rgba(255,255,255,0.25);
+    color: #fff;
+  }
+  .fix-cats-v3 {
+    display: flex;
+    gap: 4px;
+  }
+  .fix-cat-v3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    border-radius: 16px;
+    border: 1.5px solid rgba(255,255,255,0.3);
+    background: transparent;
+    color: rgba(255,255,255,0.7);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .fix-cat-v3.active {
+    background: #22c55e;
+    border-color: #22c55e;
+    color: #fff;
+  }
+  .fix-cat-v3:hover:not(.active) {
+    border-color: rgba(255,255,255,0.6);
+    color: #fff;
+  }
+
+  .fix-selects-v3 {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  @media (max-width: 640px) {
+    .fix-selects-v3 { flex-direction: column; }
+  }
+  .fix-select-card {
+    flex: 1;
+    background: var(--bg2);
+    border-radius: 12px;
+    border: 1px solid var(--border2);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .fix-select-card:hover {
+    border-color: var(--green);
+    box-shadow: var(--shadow);
+  }
+  .fix-select-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: var(--bg3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .fix-select-icon.green {
+    background: var(--green-xlight);
+  }
+  .fix-select-info {
+    flex: 1;
+    min-width: 0;
+  }
+  .fix-select-label {
+    font-size: 10px;
+    color: var(--text-dimmer);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .fix-select-value {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .fix-select-dropdown {
+    flex: 1;
+    min-width: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+  }
+  .fix-select-arrow {
+    color: var(--text-dimmer);
+    font-size: 12px;
+    flex-shrink: 0;
   }
 
   /* TABLA POSICIONES */
@@ -2371,56 +2534,78 @@
 
   <!-- ===================== FIXTURE ===================== -->
   <section class="section active" id="section-fixture">
-    <div class="section-header">
-      <div class="section-title">Fixture</div>
-      <div class="filter-tabs" id="fixtureFilters">
-        <button class="filter-tab active" onclick="filterFixture('todos', this)">Todos</button>
-        <button class="filter-tab" onclick="filterFixture('libres', this)">Libres</button>
-        <button class="filter-tab" onclick="filterFixture('senior', this)">Sénior</button>
-
+    <!-- Header v3 con gradiente -->
+    <div class="fix-header-v3">
+      <div class="fix-header-left">
+        <div class="fix-header-title">FIXTURE</div>
+        <div class="fix-fecha-pill" id="fixFechaPill">
+          <span class="fix-fecha-text" id="fixFechaText">Fecha 1 · 0/0</span>
+          <span class="fix-pendientes" id="fixPendientes">--</span>
+        </div>
+      </div>
+      <div class="fix-cats-v3" id="fixtureFilters">
+        <button class="fix-cat-v3 active" onclick="filterFixture('todos', this)">Todos</button>
+        <button class="fix-cat-v3" onclick="filterFixture('libres', this)">Libres</button>
+        <button class="fix-cat-v3" onclick="filterFixture('senior', this)">Sénior</button>
       </div>
     </div>
-        <div class="team-select-wrap">
-      <span class="team-select-icon">🛡️</span>
-      <select class="team-select" id="equipoSelect" onchange="filterByEquipo(this.value)">
-        <option value="">Todos los equipos</option>
-        <optgroup label="── LIBRES ──">
-          <option value="Abogados A">Abogados A</option>
-          <option value="Abogados AR">Abogados AR</option>
-          <option value="Abogados B">Abogados B</option>
-          <option value="Arquitectos">Arquitectos</option>
-          <option value="Contadores A">Contadores A</option>
-          <option value="Contadores Z">Contadores Z</option>
-          <option value="Docentes A">Docentes A</option>
-          <option value="Docentes B">Docentes B</option>
-          <option value="Docentes E">Docentes E</option>
-          <option value="Docentes W">Docentes W</option>
-          <option value="Ingenieros">Ingenieros</option>
-          <option value="Ingenieros S">Ingenieros S</option>
-          <option value="Maestros">Maestros</option>
-          <option value="Profesores">Profesores</option>
-          <option value="Psicólogos">Psicólogos</option>
-          <option value="Salud B">Salud B</option>
-          <option value="Salud F">Salud F</option>
-          <option value="Salud T">Salud T</option>
-          <option value="Tecnicos A">Tecnicos A</option>
-        </optgroup>
-        <optgroup label="── SENIOR ──">
-          <option value="Abogados A (S)">Abogados A (S)</option>
-          <option value="Arquitectos (S)">Arquitectos (S)</option>
-          <option value="Contadores A (S)">Contadores A (S)</option>
-          <option value="Contadores Z (S)">Contadores Z (S)</option>
-          <option value="Docentes A (S)">Docentes A (S)</option>
-          <option value="Docentes B (S)">Docentes B (S)</option>
-          <option value="Docentes F (S)">Docentes F (S)</option>
-          <option value="Docentes T (S)">Docentes T (S)</option>
-          <option value="Docentes X (S)">Docentes X (S)</option>
-          <option value="Licenciados (S)">Licenciados (S)</option>
-          <option value="Salud B (S)">Salud B (S)</option>
-          <option value="Salud F (S)">Salud F (S)</option>
-        </optgroup>
-      </select>
-      <span class="team-select-arrow">▾</span>
+    <!-- Selectores como cards -->
+    <div class="fix-selects-v3">
+      <div class="fix-select-card">
+        <div class="fix-select-icon">🛡️</div>
+        <div class="fix-select-info">
+          <div class="fix-select-label">Filtrar por equipo</div>
+          <select class="fix-select-dropdown" id="equipoSelect" onchange="filterByEquipo(this.value)">
+            <option value="">Todos los equipos</option>
+            <optgroup label="── LIBRES ──">
+              <option value="Abogados A">Abogados A</option>
+              <option value="Abogados AR">Abogados AR</option>
+              <option value="Abogados B">Abogados B</option>
+              <option value="Arquitectos">Arquitectos</option>
+              <option value="Contadores A">Contadores A</option>
+              <option value="Contadores Z">Contadores Z</option>
+              <option value="Docentes A">Docentes A</option>
+              <option value="Docentes B">Docentes B</option>
+              <option value="Docentes E">Docentes E</option>
+              <option value="Docentes W">Docentes W</option>
+              <option value="Ingenieros">Ingenieros</option>
+              <option value="Ingenieros S">Ingenieros S</option>
+              <option value="Maestros">Maestros</option>
+              <option value="Profesores">Profesores</option>
+              <option value="Psicólogos">Psicólogos</option>
+              <option value="Salud B">Salud B</option>
+              <option value="Salud F">Salud F</option>
+              <option value="Salud T">Salud T</option>
+              <option value="Tecnicos A">Tecnicos A</option>
+            </optgroup>
+            <optgroup label="── SENIOR ──">
+              <option value="Abogados A (S)">Abogados A (S)</option>
+              <option value="Arquitectos (S)">Arquitectos (S)</option>
+              <option value="Contadores A (S)">Contadores A (S)</option>
+              <option value="Contadores Z (S)">Contadores Z (S)</option>
+              <option value="Docentes A (S)">Docentes A (S)</option>
+              <option value="Docentes B (S)">Docentes B (S)</option>
+              <option value="Docentes F (S)">Docentes F (S)</option>
+              <option value="Docentes T (S)">Docentes T (S)</option>
+              <option value="Docentes X (S)">Docentes X (S)</option>
+              <option value="Licenciados (S)">Licenciados (S)</option>
+              <option value="Salud B (S)">Salud B (S)</option>
+              <option value="Salud F (S)">Salud F (S)</option>
+            </optgroup>
+          </select>
+        </div>
+        <span class="fix-select-arrow">▼</span>
+      </div>
+      <div class="fix-select-card" id="fechaSelectCard">
+        <div class="fix-select-icon green">📅</div>
+        <div class="fix-select-info">
+          <div class="fix-select-label">Seleccionar fecha</div>
+          <select class="fix-select-dropdown" id="fechaSelect" onchange="selectFecha(this.value)">
+            <option value="">Cargando...</option>
+          </select>
+        </div>
+        <span class="fix-select-arrow">▼</span>
+      </div>
     </div>
     <div id="fixtureContainer">
       <div class="loading"><div class="loading-spinner"></div><div class="loading-text">Cargando fixture...</div></div>
@@ -3305,8 +3490,8 @@ function syncFixtureToCategoria() {
   if (state.currentFixtureFilter !== filter && state.currentFixtureFilter !== 'todos') {
     state.currentFixtureFilter = filter;
     // Actualizar botón activo
-    document.querySelectorAll('#fixtureFilters .filter-tab').forEach(b => b.classList.remove('active'));
-    const btn = document.querySelector(`#fixtureFilters .filter-tab[onclick*="'${filter}'"]`);
+    document.querySelectorAll('#fixtureFilters .fix-cat-v3').forEach(b => b.classList.remove('active'));
+    const btn = document.querySelector(`#fixtureFilters .fix-cat-v3[onclick*="'${filter}'"]`);
     if (btn) btn.classList.add('active');
     if (state.fixture) renderFixture();
   } else if (state.currentFixtureFilter === 'todos') {
@@ -3438,7 +3623,7 @@ function buildDetailsHTML(json) {
 }
 
 function filterFixture(filter, btn) {
-  document.querySelectorAll('#fixtureFilters .filter-tab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('#fixtureFilters .fix-cat-v3').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   state.currentFixtureFilter = filter;
   // Sincronizar categoría global
@@ -3541,6 +3726,32 @@ function filterByEquipo(equipo) {
   const statusCls = completa ? 'completa' : '';
   const statusTxt = completa ? '✓ Completa' : `${pendientes} pendiente${pendientes !== 1 ? 's' : ''}`;
 
+  // ── Actualizar header pill v3 ──
+  const fixFechaText = document.getElementById('fixFechaText');
+  const fixPendientes = document.getElementById('fixPendientes');
+  const fechaSelect = document.getElementById('fechaSelect');
+  
+  if (fixFechaText) {
+    fixFechaText.textContent = `Fecha ${selKey} · ${jugados}/${sinLibre.length}`;
+  }
+  if (fixPendientes) {
+    fixPendientes.textContent = statusTxt;
+    fixPendientes.classList.toggle('completa', completa);
+  }
+  
+  // ── Poblar select de fechas ──
+  if (fechaSelect) {
+    const opts = fechaKeys.map(k => {
+      const todos = groups[k];
+      const sinLib = todos.filter(p => !String(p.partido || '').toLowerCase().includes('libre'));
+      const jug = sinLib.filter(p => p.jugado === true || p.jugado === 'Jugado').length;
+      const tot = sinLib.length;
+      const lbl = `Fecha ${k} (${jug}/${tot} jugados)`;
+      return `<option value="${k}" ${k === selKey ? 'selected' : ''}>${lbl}</option>`;
+    }).join('');
+    fechaSelect.innerHTML = opts;
+  }
+
   // ── Si hay filtro de equipo: mostrar todos los partidos sin selector de fecha ──
   const itemsToRender = state.currentEquipo ? items : selItems;
 
@@ -3548,30 +3759,12 @@ function filterByEquipo(equipo) {
   if (state.currentEquipo) {
     const totalEquipo = items.length;
     const jugadosEquipo = items.filter(p => p.jugado === true || p.jugado === 'Jugado').length;
-    html = `
-  <div class="fecha-selector-wrap">
-    <span class="fecha-selector-label">🛡️ ${state.currentEquipo}</span>
-    <span class="fecha-selector-status">${jugadosEquipo}/${totalEquipo} jugados</span>
-  </div>`;
-  } else {
-    // ── Selector de fecha ──
-    const opts = fechaKeys.map(k => {
-      const todos    = groups[k];
-      const sinLib   = todos.filter(p => !String(p.partido || '').toLowerCase().includes('libre'));
-      const jug      = sinLib.filter(p => p.jugado === true || p.jugado === 'Jugado').length;
-      const tot      = sinLib.length;
-      const lbl      = `Fecha ${k}  (${jug}/${tot} jugados)`;
-      return `<option value="${k}" ${k === selKey ? 'selected' : ''}>${lbl}</option>`;
-    }).join('');
-
-    html = `
-  <div class="fecha-selector-wrap">
-    <span class="fecha-selector-label">📅 Fecha ${selKey}</span>
-    <span class="fecha-selector-status ${statusCls}">${statusTxt}</span>
-    <select class="fecha-selector-select" onchange="selectFecha(this.value)">
-      ${opts}
-    </select>
-  </div>`;
+    // Actualizar el header para mostrar info del equipo
+    if (fixFechaText) fixFechaText.textContent = `${state.currentEquipo} · ${jugadosEquipo}/${totalEquipo}`;
+    if (fixPendientes) {
+      fixPendientes.textContent = 'Ver todos';
+      fixPendientes.classList.remove('completa');
+    }
   }
 
   // ── Partidos a renderizar ──
