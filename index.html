@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- CDP Fixture — index.html — 2026-04-28 16:50 ARG — SUPABASE -->
+<!-- CDP Fixture — index.html — 2026-04-28 17:00 ARG — SUPABASE -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -937,7 +937,14 @@
     margin-bottom: 16px;
   }
   @media (max-width: 640px) {
-    .fix-selects-v3 { flex-direction: column; }
+    .fix-selects-v3 {
+      flex-direction: row;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      -webkit-overflow-scrolling: touch;
+    }
+    .fix-selects-v3::-webkit-scrollbar { display: none; }
   }
   .fix-select-icon {
     width: 38px;
@@ -1012,6 +1019,39 @@
     color: var(--text-dimmer);
     font-size: 12px;
     flex-shrink: 0;
+  }
+  /* Mobile pills style */
+  @media (max-width: 640px) {
+    .fix-select-card {
+      flex: 0 0 auto;
+      border-radius: 24px;
+      padding: 10px 16px;
+      gap: 8px;
+    }
+    .fix-select-card .fix-select-icon {
+      width: auto;
+      height: auto;
+      background: none;
+      font-size: 16px;
+    }
+    .fix-select-card .fix-select-label {
+      display: none;
+    }
+    .fix-select-card .fix-select-value,
+    .fix-select-card .fix-select-dropdown {
+      font-size: 13px;
+    }
+    .fix-select-card.fecha-pill {
+      background: var(--green-xlight);
+      border-color: var(--green);
+    }
+    .fix-select-card.fecha-pill .fix-select-value,
+    .fix-select-card.fecha-pill .fix-select-dropdown {
+      color: #166534;
+    }
+    .fix-select-card.fecha-pill .fix-select-arrow {
+      color: #166534;
+    }
   }
 
   /* ═══ POSICIONES HEADER V2 ═══ */
@@ -2943,7 +2983,7 @@
         </div>
         <span class="fix-select-arrow">▼</span>
       </label>
-      <label class="fix-select-card">
+      <label class="fix-select-card fecha-pill">
         <div class="fix-select-icon green">📅</div>
         <div class="fix-select-info">
           <div class="fix-select-label">Seleccionar fecha</div>
