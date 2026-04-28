@@ -1720,133 +1720,268 @@
   }
 
   /* ─── CLIMA ─────────────────────────────────────── */
-  .clima-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 12px;
-    padding: 16px;
-  }
-  .clima-card {
-    background: #ffffff;
-    border-radius: 16px;
-    border: 2px solid #e2e8f0;
-    padding: 14px 12px;
-    text-align: center;
-    transition: transform 0.15s, box-shadow 0.15s;
-    position: relative;
-  }
-  .clima-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.08); }
-  .clima-card.highlight {
-    border-color: #16a34a;
-    background: linear-gradient(135deg, #f0fdf4, #dcfce7);
-    box-shadow: 0 4px 16px rgba(22,163,74,.15);
-  }
-  .clima-card.highlight-rain {
-    border-color: #3b82f6;
-    background: linear-gradient(135deg, #eff6ff, #dbeafe);
-    box-shadow: 0 4px 16px rgba(59,130,246,.15);
-  }
-  .clima-card.highlight-storm {
-    border-color: #dc2626;
-    background: linear-gradient(135deg, #fef2f2, #fee2e2);
-    box-shadow: 0 4px 16px rgba(220,38,38,.15);
-  }
-  .clima-badge {
-    position: absolute;
-    top: -8px; right: -8px;
-    background: #16a34a;
-    color: white;
-    font-size: 10px;
+  .clima-section-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 16px;
     font-weight: 700;
-    padding: 2px 7px;
-    border-radius: 10px;
-    font-family: 'Barlow Condensed', sans-serif;
-    letter-spacing: 0.5px;
-  }
-  .clima-badge.badge-rain { background: #3b82f6; }
-  .clima-badge.badge-storm { background: #dc2626; }
-  .clima-dia {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    color: #64748b;
+    color: var(--text-dim);
     text-transform: uppercase;
     letter-spacing: 1px;
-    margin-bottom: 2px;
+    padding: 12px 16px 8px;
   }
-  .clima-fecha-num {
-    font-size: 22px;
-    font-weight: 700;
-    color: #0f172a;
-    font-family: 'Bebas Neue', sans-serif;
-    line-height: 1;
+
+  /* Opción 1: Cards con sidebar para días de partido */
+  .clima-partido-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 12px;
+    padding: 0 16px 16px;
+  }
+  .clima-card-sidebar {
+    display: flex;
+    align-items: stretch;
+    border: 1px solid var(--border2);
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--bg2);
+    transition: all 0.15s;
+  }
+  .clima-card-sidebar:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
+  .clima-card-sidebar.highlight { border-color: #16a34a; }
+  .clima-card-sidebar.highlight-rain { border-color: #3b82f6; }
+  .clima-card-sidebar.highlight-storm { border-color: #dc2626; }
+
+  .clima-card-content {
+    flex: 1;
+    padding: 14px 16px;
+  }
+  .clima-card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
     margin-bottom: 6px;
   }
-  .clima-icon { font-size: 34px; margin: 4px 0; line-height: 1; }
-  .clima-temp {
-    font-size: 18px;
-    font-weight: 700;
-    color: #0f172a;
-    font-family: 'Barlow Condensed', sans-serif;
-    margin-bottom: 8px;
+  .clima-day-name {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-dimmer);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
   }
-  .clima-temp span { font-size: 13px; color: #64748b; font-weight: 400; }
-  .clima-stats {
+  .clima-date {
+    font-family: Impact, 'Arial Black', sans-serif;
+    font-size: 22px;
+    color: var(--text);
+    line-height: 1;
+  }
+  .clima-badge-jugable {
+    background: linear-gradient(135deg, #166534, #22c55e);
+    color: #fff;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .clima-badge-jugable.no-jugable {
+    background: linear-gradient(135deg, #991b1b, #ef4444);
+  }
+  .clima-weather-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 8px 0;
+  }
+  .clima-icon-big { font-size: 38px; line-height: 1; }
+  .clima-temps {
     display: flex;
     flex-direction: column;
-    gap: 5px;
-    margin-top: 6px;
-    border-top: 1px solid #e2e8f0;
-    padding-top: 8px;
   }
-  .clima-stat {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 12px;
-    color: #475569;
+  .clima-temp-max {
+    font-family: Impact, 'Arial Black', sans-serif;
+    font-size: 28px;
+    color: var(--text);
+    line-height: 1;
   }
-  .clima-stat-val {
-    font-weight: 700;
-    font-family: 'Barlow Condensed', sans-serif;
+  .clima-temp-min {
     font-size: 13px;
-    color: #0f172a;
+    color: var(--text-dimmer);
   }
-  .clima-stat-val.rain-high { color: #2563eb; }
-  .clima-stat-val.rain-med  { color: #7c3aed; }
-  .clima-stat-val.rain-low  { color: #16a34a; }
-  .clima-lluvia-bar {
-    width: 100%;
-    height: 6px;
-    background: #e2e8f0;
-    border-radius: 3px;
-    overflow: hidden;
-    margin-top: 3px;
-  }
-  .clima-lluvia-fill {
-    height: 100%;
-    border-radius: 3px;
-    background: #3b82f6;
-    transition: width 0.5s ease;
-  }
-  .clima-desc {
-    font-size: 11px;
-    color: #64748b;
-    margin-top: 4px;
-    font-style: italic;
-  }
-  .clima-rain-hours {
-    font-size: 10.5px;
-    font-weight: 600;
-    color: #2563eb;
-    background: #eff6ff;
-    border: 1px solid #bfdbfe;
-    border-radius: 6px;
-    padding: 4px 8px;
+  .clima-detail-row {
+    display: flex;
+    gap: 16px;
+    font-size: 12px;
+    color: var(--text-dim);
     margin-top: 6px;
-    text-align: center;
-    line-height: 1.3;
   }
+  .clima-condition {
+    font-size: 11px;
+    color: var(--text-dimmer);
+    font-style: italic;
+    margin-top: 4px;
+  }
+  .clima-card-sidebar-panel {
+    background: linear-gradient(135deg, #374151 0%, #6b7280 100%);
+    color: #fff;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-width: 80px;
+    width: 80px;
+  }
+  [data-theme="dark"] .clima-card-sidebar-panel {
+    background: linear-gradient(135deg, #334155 0%, #475569 100%);
+  }
+  [data-theme="green"] .clima-card-sidebar-panel {
+    background: linear-gradient(135deg, #166534 0%, #22c55e 100%);
+  }
+  [data-theme="blue"] .clima-card-sidebar-panel {
+    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+  }
+  .clima-card-sidebar.highlight .clima-card-sidebar-panel {
+    background: linear-gradient(135deg, #166534 0%, #22c55e 100%);
+  }
+  .clima-card-sidebar.highlight-rain .clima-card-sidebar-panel {
+    background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+  }
+  .clima-card-sidebar.highlight-storm .clima-card-sidebar-panel {
+    background: linear-gradient(135deg, #991b1b 0%, #ef4444 100%);
+  }
+  .clima-prob-num {
+    font-family: Impact, 'Arial Black', sans-serif;
+    font-size: 32px;
+    line-height: 1;
+  }
+  .clima-prob-label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.9;
+    margin-top: 2px;
+  }
+  .clima-sidebar-condition {
+    font-size: 10px;
+    margin-top: 6px;
+    opacity: 0.85;
+    text-align: center;
+    line-height: 1.2;
+  }
+
+  /* Opción 3: Cards compactos horizontales para pronóstico extendido */
+  .clima-extended-list {
+    padding: 0 16px 16px;
+  }
+  .clima-card-compact {
+    display: flex;
+    align-items: center;
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--bg2);
+    border: 1px solid var(--border2);
+    border-left: 4px solid #22c55e;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    gap: 12px;
+    transition: all 0.15s;
+  }
+  .clima-card-compact:hover { transform: translateX(2px); box-shadow: var(--shadow); }
+  .clima-card-compact.highlight-rain { border-left-color: #3b82f6; }
+  .clima-card-compact.highlight-storm { border-left-color: #ef4444; }
+  .clima-card-compact.no-jugable { border-left-color: #94a3b8; }
+
+  .clima-cc-date {
+    text-align: center;
+    min-width: 55px;
+  }
+  .clima-cc-day {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-dimmer);
+    text-transform: uppercase;
+  }
+  .clima-cc-num {
+    font-family: Impact, 'Arial Black', sans-serif;
+    font-size: 18px;
+    color: var(--text);
+    line-height: 1.1;
+  }
+  .clima-cc-badge {
+    font-size: 8px;
+    font-weight: 700;
+    color: #22c55e;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    margin-top: 2px;
+  }
+  .clima-cc-badge.rain { color: #3b82f6; }
+  .clima-cc-badge.storm { color: #ef4444; }
+  .clima-cc-badge.hoy {
+    background: var(--green);
+    color: #fff;
+    padding: 1px 6px;
+    border-radius: 6px;
+  }
+  .clima-cc-icon { font-size: 32px; flex-shrink: 0; }
+  .clima-cc-temps { flex: 1; min-width: 70px; }
+  .clima-cc-temp-main {
+    font-family: Impact, 'Arial Black', sans-serif;
+    font-size: 22px;
+    color: var(--text);
+    line-height: 1;
+  }
+  .clima-cc-temp-min {
+    font-size: 12px;
+    color: var(--text-dimmer);
+  }
+  .clima-cc-condition {
+    font-size: 10px;
+    color: var(--text-dimmer);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100px;
+  }
+  .clima-cc-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-size: 11px;
+    color: var(--text-dim);
+    min-width: 65px;
+  }
+  .clima-cc-prob-pill {
+    background: linear-gradient(135deg, #374151, #6b7280);
+    color: #fff;
+    font-family: Impact, 'Arial Black', sans-serif;
+    font-size: 14px;
+    padding: 6px 10px;
+    border-radius: 16px;
+    text-align: center;
+    min-width: 50px;
+  }
+  .clima-card-compact.highlight .clima-cc-prob-pill {
+    background: linear-gradient(135deg, #166534, #22c55e);
+  }
+  .clima-card-compact.highlight-rain .clima-cc-prob-pill {
+    background: linear-gradient(135deg, #1e40af, #3b82f6);
+  }
+  .clima-card-compact.highlight-storm .clima-cc-prob-pill {
+    background: linear-gradient(135deg, #991b1b, #ef4444);
+  }
+  [data-theme="dark"] .clima-cc-prob-pill {
+    background: linear-gradient(135deg, #334155, #475569);
+  }
+  [data-theme="green"] .clima-cc-prob-pill {
+    background: linear-gradient(135deg, #166534, #22c55e);
+  }
+  [data-theme="blue"] .clima-cc-prob-pill {
+    background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+  }
+
+  /* Alertas clima */
   .clima-alerta {
     margin: 0 16px 12px;
     background: #eff6ff;
@@ -1857,13 +1992,20 @@
     align-items: flex-start;
     gap: 10px;
   }
+  [data-theme="dark"] .clima-alerta {
+    background: rgba(59,130,246,0.15);
+  }
   .clima-alerta.alerta-storm {
     background: #fef2f2;
     border-color: #dc2626;
   }
+  [data-theme="dark"] .clima-alerta.alerta-storm {
+    background: rgba(220,38,38,0.15);
+  }
   .clima-alerta-icon { font-size: 22px; flex-shrink: 0; }
-  .clima-alerta-text { font-size: 13px; color: #0f172a; line-height: 1.4; }
+  .clima-alerta-text { font-size: 13px; color: var(--text); line-height: 1.4; }
   .clima-alerta-text strong { display: block; font-size: 14px; margin-bottom: 2px; }
+
   .clima-updated {
     text-align: center;
     font-size: 11px;
@@ -1871,29 +2013,15 @@
     padding: 8px 16px 16px;
     font-style: italic;
   }
-  .clima-partido-dia {
-    margin: 0 16px 8px;
-    padding: 10px 14px;
-    background: var(--bg3);
-    border-radius: 10px;
-    border-left: 4px solid var(--green);
-    font-size: 13px;
-    color: var(--text-dim);
-  }
-  .clima-partido-dia strong { color: var(--text); }
-  .clima-section-title {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--text-dim);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    padding: 12px 16px 4px;
-  }
   .clima-error {
     text-align: center;
     padding: 40px 20px;
     color: var(--text-dimmer);
+  }
+
+  @media (max-width: 480px) {
+    .clima-partido-grid { grid-template-columns: 1fr; }
+    .clima-cc-condition { max-width: 70px; }
   }
 
   /* ─── FECHA SELECTOR ─────────────────────────────────────── */
@@ -6023,7 +6151,7 @@ document.getElementById('rojaModalOverlay').addEventListener('click', function(e
 
   function renderClima(daily, hourly) {
     const container = document.getElementById('climaContainer');
-    const dates     = daily.time;           // ["2026-02-27", ...]
+    const dates     = daily.time;
     const codes     = daily.weathercode;
     const tmax      = daily.temperature_2m_max;
     const tmin      = daily.temperature_2m_min;
@@ -6031,69 +6159,12 @@ document.getElementById('rojaModalOverlay').addEventListener('click', function(e
     const prob      = daily.precipitation_probability_max;
     const viento    = daily.windspeed_10m_max;
 
-    // ── Procesar datos horarios para rangos de lluvia ──
-    function getRainRanges(dateStr) {
-      if (!hourly || !hourly.time || !hourly.precipitation) return null;
-      const start = dateStr + 'T00:00';
-      const rainHours = [];
-      for (let h = 0; h < 24; h++) {
-        const hStr = dateStr + 'T' + String(h).padStart(2, '0') + ':00';
-        const idx = hourly.time.indexOf(hStr);
-        if (idx >= 0 && hourly.precipitation[idx] > 0.1) {
-          rainHours.push(h);
-        }
-      }
-      if (!rainHours.length) {
-        // Fallback: buscar horas con probabilidad alta (>= 50%)
-        if (hourly.precipitation_probability) {
-          for (let h = 0; h < 24; h++) {
-            const hStr = dateStr + 'T' + String(h).padStart(2, '0') + ':00';
-            const idx = hourly.time.indexOf(hStr);
-            if (idx >= 0 && hourly.precipitation_probability[idx] >= 50) {
-              rainHours.push(h);
-            }
-          }
-        }
-        if (!rainHours.length) return null;
-      }
-      // Agrupar rangos continuos
-      const ranges = [];
-      let rangeStart = rainHours[0];
-      let rangeEnd = rainHours[0];
-      for (let i = 1; i < rainHours.length; i++) {
-        if (rainHours[i] === rangeEnd + 1) {
-          rangeEnd = rainHours[i];
-        } else {
-          ranges.push([rangeStart, rangeEnd]);
-          rangeStart = rainHours[i];
-          rangeEnd = rainHours[i];
-        }
-      }
-      ranges.push([rangeStart, rangeEnd]);
-      return ranges;
-    }
-
-    function formatRainRanges(ranges) {
-      if (!ranges || !ranges.length) return '';
-      // Si llueve todo el día (más de 12hs), decir "todo el día"
-      const totalHours = ranges.reduce((sum, r) => sum + (r[1] - r[0] + 1), 0);
-      if (totalHours >= 16) return '🌧️ Lluvia todo el día';
-      // Mostrar los rangos principales (máx 2)
-      const parts = ranges.slice(0, 2).map(r => {
-        const from = String(r[0]).padStart(2, '0') + ':00';
-        const to = String(r[1] + 1).padStart(2, '0') + ':00';
-        if (r[0] === r[1]) return from + 'hs';
-        return from + ' a ' + to + 'hs';
-      });
-      return '🌧️ ' + parts.join(' y ');
-    }
-
     let html = '';
 
-    // ── Alertas para días de partido (Jue/Vie/Sáb) ──
+    // ── Alertas para días de partido (Vie/Sáb) ──
     const alerts = [];
     dates.forEach((d, i) => {
-      const dow = new Date(d + 'T12:00:00').getDay(); // 4=Jue 5=Vie 6=Sáb
+      const dow = new Date(d + 'T12:00:00').getDay();
       if ([5,6].includes(dow)) {
         const wmo = getWmo(codes[i]);
         if (codes[i] >= 95) {
@@ -6107,111 +6178,121 @@ document.getElementById('rojaModalOverlay').addEventListener('click', function(e
     if (alerts.length > 0) {
       alerts.forEach(a => {
         const [,mes,dia] = a.fecha.split('-');
-        html += `
-        <div class="clima-alerta ${a.type==='storm'?'alerta-storm':''}">
-          <div class="clima-alerta-icon">${a.type==='storm'?'⚡':'🌧️'}</div>
-          <div class="clima-alerta-text">
-            <strong>${a.type==='storm'?'⚠️ Alerta tormenta':'🌧️ Lluvia probable'} — ${a.dia} ${dia}/${mes}</strong>
-            ${a.desc} · ${a.prob}% prob. · ${a.mm.toFixed(1)} mm esperados
-          </div>
-        </div>`;
+        html += '<div class="clima-alerta ' + (a.type==='storm'?'alerta-storm':'') + '">' +
+          '<div class="clima-alerta-icon">' + (a.type==='storm'?'⚡':'🌧️') + '</div>' +
+          '<div class="clima-alerta-text">' +
+            '<strong>' + (a.type==='storm'?'⚠️ Alerta tormenta':'🌧️ Lluvia probable') + ' — ' + a.dia + ' ' + dia + '/' + mes + '</strong>' +
+            a.desc + ' · ' + a.prob + '% prob. · ' + a.mm.toFixed(1) + ' mm esperados' +
+          '</div>' +
+        '</div>';
       });
     }
 
-    // ── Días de partido destacados ──
-    html += `<div class="clima-section-title">⚽ Días de partido — Viernes y Sábados</div>`;
-    html += '<div class="clima-grid">';
+    // ── OPCIÓN 1: Días de partido con sidebar ──
+    html += '<div class="clima-section-title">⚽ Días de partido — Viernes y Sábados</div>';
+    html += '<div class="clima-partido-grid">';
 
-    dates.forEach((d, i) => {
-      const dt  = new Date(d + 'T12:00:00');
-      const dow = dt.getDay();
+    dates.forEach(function(d, i) {
+      var dt  = new Date(d + 'T12:00:00');
+      var dow = dt.getDay();
       if (![5,6].includes(dow)) return;
 
-      const [,mes,dia] = d.split('-');
-      const wmo    = getWmo(codes[i]);
-      const hl     = cardHighlight(prob[i], mm[i], codes[i]);
-      const badge  = badgeText(prob[i], mm[i], codes[i], true);
-      const fillW  = Math.min(100, prob[i]);
-      const rainRanges = getRainRanges(d);
-      const rainText   = formatRainRanges(rainRanges);
+      var parts = d.split('-');
+      var mes = parts[1];
+      var dia = parts[2];
+      var wmo    = getWmo(codes[i]);
+      var hl     = cardHighlight(prob[i], mm[i], codes[i]);
+      var esJugable = prob[i] < 50 && mm[i] < 5 && codes[i] < 95;
+      var descCorta = wmo.desc.length > 15 ? wmo.desc.substring(0, 15) + '...' : wmo.desc;
 
-      html += `
-      <div class="clima-card ${hl}">
-        ${badge ? `<div class="clima-badge ${badge.cls}">${badge.text}</div>` : ''}
-        <div class="clima-dia">${DIAS[dow]}</div>
-        <div class="clima-fecha-num">${dia}/${mes}</div>
-        <div class="clima-icon">${wmo.icon}</div>
-        <div class="clima-temp">${Math.round(tmax[i])}° <span>/ ${Math.round(tmin[i])}°</span></div>
-        <div class="clima-stats">
-          <div class="clima-stat">
-            <span>🌧️ Prob.</span>
-            <span class="clima-stat-val ${rainClass(prob[i])}">${prob[i]}%</span>
-          </div>
-          <div class="clima-lluvia-bar">
-            <div class="clima-lluvia-fill" style="width:${fillW}%"></div>
-          </div>
-          <div class="clima-stat">
-            <span>💧 mm</span>
-            <span class="clima-stat-val ${prob[i]>=40?'rain-high':''}">${mm[i].toFixed(1)} mm</span>
-          </div>
-          <div class="clima-stat">
-            <span>💨 Viento</span>
-            <span class="clima-stat-val">${Math.round(viento[i])} km/h</span>
-          </div>
-        </div>
-        ${rainText ? `<div class="clima-rain-hours">${rainText}</div>` : ''}
-        <div class="clima-desc">${wmo.desc}</div>
-      </div>`;
+      html += '<div class="clima-card-sidebar ' + hl + '">' +
+        '<div class="clima-card-content">' +
+          '<div class="clima-card-header">' +
+            '<div>' +
+              '<div class="clima-day-name">' + DIAS_FULL[dow] + '</div>' +
+              '<div class="clima-date">' + dia + '/' + mes + '</div>' +
+            '</div>' +
+            '<span class="clima-badge-jugable' + (esJugable ? '' : ' no-jugable') + '">' + (esJugable ? '✓ Jugable' : '⚠ Alerta') + '</span>' +
+          '</div>' +
+          '<div class="clima-weather-row">' +
+            '<div class="clima-icon-big">' + wmo.icon + '</div>' +
+            '<div class="clima-temps">' +
+              '<span class="clima-temp-max">' + Math.round(tmax[i]) + '°</span>' +
+              '<span class="clima-temp-min">Min ' + Math.round(tmin[i]) + '°</span>' +
+            '</div>' +
+          '</div>' +
+          '<div class="clima-detail-row">' +
+            '<span>💧 ' + mm[i].toFixed(1) + ' mm</span>' +
+            '<span>💨 ' + Math.round(viento[i]) + ' km/h</span>' +
+          '</div>' +
+        '</div>' +
+        '<div class="clima-card-sidebar-panel">' +
+          '<div class="clima-prob-num">' + prob[i] + '%</div>' +
+          '<div class="clima-prob-label">Lluvia</div>' +
+          '<div class="clima-sidebar-condition">' + descCorta + '</div>' +
+        '</div>' +
+      '</div>';
     });
     html += '</div>';
 
-    // ── Todos los días ──
-    html += `<div class="clima-section-title" style="margin-top:8px">📅 Pronóstico completo — 10 días</div>`;
-    html += '<div class="clima-grid">';
+    // ── OPCIÓN 3: Pronóstico extendido compacto ──
+    html += '<div class="clima-section-title" style="margin-top:8px">📅 Pronóstico completo — 10 días</div>';
+    html += '<div class="clima-extended-list">';
 
-    dates.forEach((d, i) => {
-      const dt  = new Date(d + 'T12:00:00');
-      const dow = dt.getDay();
-      const [,mes,dia] = d.split('-');
-      const wmo    = getWmo(codes[i]);
-      const hl     = cardHighlight(prob[i], mm[i], codes[i]);
-      const badge  = badgeText(prob[i], mm[i], codes[i], [5,6].includes(dow));
-      const fillW  = Math.min(100, prob[i]);
-      const isToday = (i === 0);
-      const rainRanges10 = getRainRanges(d);
-      const rainText10   = formatRainRanges(rainRanges10);
+    dates.forEach(function(d, i) {
+      var dt  = new Date(d + 'T12:00:00');
+      var dow = dt.getDay();
+      var parts = d.split('-');
+      var mes = parts[1];
+      var dia = parts[2];
+      var wmo    = getWmo(codes[i]);
+      var hl     = cardHighlight(prob[i], mm[i], codes[i]);
+      var isToday = (i === 0);
+      var esPartido = [5,6].includes(dow);
+      var esJugable = esPartido && prob[i] < 50 && mm[i] < 5 && codes[i] < 95;
 
-      html += `
-      <div class="clima-card ${hl}">
-        ${isToday ? '<div class="clima-badge">HOY</div>' : (badge ? `<div class="clima-badge ${badge.cls}">${badge.text}</div>` : '')}
-        <div class="clima-dia">${DIAS[dow]}</div>
-        <div class="clima-fecha-num">${dia}/${mes}</div>
-        <div class="clima-icon">${wmo.icon}</div>
-        <div class="clima-temp">${Math.round(tmax[i])}° <span>/ ${Math.round(tmin[i])}°</span></div>
-        <div class="clima-stats">
-          <div class="clima-stat">
-            <span>🌧️ Prob.</span>
-            <span class="clima-stat-val ${rainClass(prob[i])}">${prob[i]}%</span>
-          </div>
-          <div class="clima-lluvia-bar">
-            <div class="clima-lluvia-fill" style="width:${fillW}%"></div>
-          </div>
-          <div class="clima-stat">
-            <span>💧 mm</span>
-            <span class="clima-stat-val ${prob[i]>=40?'rain-high':''}">${mm[i].toFixed(1)} mm</span>
-          </div>
-          <div class="clima-stat">
-            <span>💨 Viento</span>
-            <span class="clima-stat-val">${Math.round(viento[i])} km/h</span>
-          </div>
-        </div>
-        ${rainText10 ? `<div class="clima-rain-hours">${rainText10}</div>` : ''}
-        <div class="clima-desc">${wmo.desc}</div>
-      </div>`;
+      var badgeCls = '';
+      var badgeText = '';
+      if (isToday) {
+        badgeCls = 'hoy';
+        badgeText = 'HOY';
+      } else if (esPartido) {
+        if (codes[i] >= 95) {
+          badgeCls = 'storm';
+          badgeText = '⚠ Tormenta';
+        } else if (prob[i] >= 50 || mm[i] >= 5) {
+          badgeCls = 'rain';
+          badgeText = '🌧 Lluvia';
+        } else {
+          badgeText = '✓ Jugable';
+        }
+      }
+
+      var borderCls = hl;
+      if (!esPartido && !isToday) borderCls = 'no-jugable';
+
+      html += '<div class="clima-card-compact ' + borderCls + '">' +
+        '<div class="clima-cc-date">' +
+          '<div class="clima-cc-day">' + DIAS[dow] + '</div>' +
+          '<div class="clima-cc-num">' + dia + '/' + mes + '</div>' +
+          (badgeText ? '<div class="clima-cc-badge ' + badgeCls + '">' + badgeText + '</div>' : '') +
+        '</div>' +
+        '<div class="clima-cc-icon">' + wmo.icon + '</div>' +
+        '<div class="clima-cc-temps">' +
+          '<div class="clima-cc-temp-main">' + Math.round(tmax[i]) + '°</div>' +
+          '<div class="clima-cc-temp-min">Min ' + Math.round(tmin[i]) + '°</div>' +
+          '<div class="clima-cc-condition">' + wmo.desc + '</div>' +
+        '</div>' +
+        '<div class="clima-cc-stats">' +
+          '<span>💧 ' + mm[i].toFixed(1) + ' mm</span>' +
+          '<span>💨 ' + Math.round(viento[i]) + ' km/h</span>' +
+        '</div>' +
+        '<div class="clima-cc-prob-pill">' + prob[i] + '%</div>' +
+      '</div>';
     });
 
     html += '</div>';
-    html += `<div class="clima-updated">Fuente: Open-Meteo.com · Se actualiza cada vez que abrís esta sección</div>`;
+    html += '<div class="clima-updated">Fuente: Open-Meteo.com · Se actualiza cada vez que abrís esta sección</div>';
 
     container.innerHTML = html;
   }
