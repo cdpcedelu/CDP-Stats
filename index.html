@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- CDP Fixture — index.html — 2026-04-28 18:05 ARG — SUPABASE -->
+<!-- CDP Fixture — index.html — 2026-04-29 15:45 ARG — SUPABASE -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -4155,7 +4155,11 @@ function filterByEquipo(equipo) {
   // ── Poblar select de fechas ──
   if (fechaSelect) {
     const opts = fechaKeys.map(k => {
-      const lbl = `Fecha ${k}`;
+      const todos = groups[k];
+      const sinLib = todos.filter(p => !String(p.partido || '').toLowerCase().includes('libre'));
+      const jug = sinLib.filter(p => p.jugado === true || p.jugado === 'Jugado').length;
+      const tot = sinLib.length;
+      const lbl = `Fecha ${k} (${jug}/${tot})`;
       return `<option value="${k}" ${k === selKey ? 'selected' : ''}>${lbl}</option>`;
     }).join('');
     fechaSelect.innerHTML = opts;
@@ -6014,7 +6018,7 @@ async function loadRosterForTeam(team, side) {
     const res = await fetch(SUPABASE_URL + '?action=getRoster&team=' + encodeURIComponent(team) + '&token=' + encodeURIComponent(adminState.token));
     const json = await res.json();
     if (json.auth === false) { adminLogout(); alert('Sesión expirada.'); return; }
-    players = json.players || [];
+    players = json.data || json.players || [];
 
     adminState.rostersCache[team] = players;
     populateSelects(side, players);
@@ -6476,7 +6480,7 @@ async function onRojaEquipoChange(team) {
     } else {
       const res = await fetch(SUPABASE_URL + '?action=getRoster&team=' + encodeURIComponent(team) + '&token=' + encodeURIComponent(adminState.token));
       const json = await res.json();
-      const players = json.players || [];
+      const players = json.data || json.players || [];
       adminState.rostersCache[team] = players;
       populateRojaJugadorSelect(players);
     }
